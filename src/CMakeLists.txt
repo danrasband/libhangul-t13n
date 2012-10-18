@@ -1,4 +1,3 @@
-cmake_minimum_required (VERSION 2.8)
-project (libhangeul-romaja)
-
 add_library(hangeul-romaja SHARED hangeul-romaja.c)
+add_library(hangeul-romaja_static STATIC hangeul-romaja.c)
+target_link_libraries(hangeul-romaja hangul)
