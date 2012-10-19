@@ -1,9 +1,10 @@
 /**
  * Copyright 2012 Daniel C. Rasband
  */
-#include "hangeul-romaja.h"
+#include <hangeul-romaja.h>
 
 int
-testme() {
+test_main()
+{
     return 0;
 }
