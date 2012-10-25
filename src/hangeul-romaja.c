@@ -73,7 +73,6 @@ hangeul_parse_str(Hangeul** hangeulRef, const char *source)
     char hangeul[3];
 
     while ((next = source[i]) != '\0') {
-        if (next > )
         i++;
     }
 
