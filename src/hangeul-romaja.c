@@ -1,46 +1,18 @@
 /**
  * Copyright 2012 Daniel C. Rasband.
  */
-#include "hangeul-romaja.h"
+/* Standard Library */
 #include <string.h>
 #include <stdio.h>
-#include <inttypes.h>
 
-typedef uint32_t ucschar;
-
-/* Data structures */
-typedef struct _Hangeul Hangeul;
-typedef struct _Romaja Romaja;
-
-typedef enum SyllableType {
-    HANGEUL, NONHANGEUL
-} SyllableType;
-
-struct _Hangeul {
-    Hangeul *prev;
-
-    ucschar choseong;
-    ucschar jungseong;
-    ucschar jongseong;
-    ucschar nonhangeul;
-    ucschar combined;
-    SyllableType syllable_type;
-
-    Hangeul *next;
-};
-
-struct _Romaja {
-    Romaja *prev;
-
-    ucschar initial[4];
-    ucschar vowel[4];
-    ucschar final[4];
-    ucschar nonhangeul;
-    ucschar combined;
-    SyllableType syllable_type;
-
-    Romaja *next;
-};
+/* Local includes */
+#include "hangeul-romaja.h"
+#include "types.h"
+#include "ipa.h"
+#include "mccune_reischauer.h"
+#include "revised_romanization.h"
+#include "yale.h"
+#include "yale_original.h"
 
 /* Declarations */
 int hangeul_parse_str(Hangeul **hangeulRef, const char *source);
@@ -50,21 +22,10 @@ int hangeul_strlen(const Hangeul *hangeul);
 int romaja_parse_str(Romaja **romajaRef, const char *source);
 int romaja_strlen(const Romaja *romaja);
 void hangeul_push(Hangeul **hangeul, ucschar combined);
-void romaja_push(Romaja **romaja, ucschar character);
-
-/* Build yale romaja from Hangeul */
-int
-_hangeul_to_yale(Romaja **yaleRef, const Hangeul *hangeul) {
-    const Hangeul *ptr = hangeul;
-
-    while (ptr != NULL) {
-        ptr = hangeul->next;
-    }
-
-}
+void romaja_push(Romaja **romaja, ucschar initial[4], ucschar vowel[4], ucschar final[4], ucschar nonhangeul, ucschar combined, SyllableType syllable_type);
 
 int
-hangeul_to_yale(char *yale, size_t size, const char *hangeul)
+hangeul_to_yale(char *romaja, size_t size, const char *hangeul)
 {
     int chars_left = 0;
     Hangeul *h = NULL;
@@ -73,16 +34,34 @@ hangeul_to_yale(char *yale, size_t size, const char *hangeul)
     /* Parse hangeul string into manageable chunks */
     hangeul_parse_str(&h, hangeul);
 
-    /* Convert to yale in manageable chunks */
+    /* Convert to romaja in manageable chunks */
     _hangeul_to_yale(&r, h);
 
-    /* Copy string to yale var */
-    chars_left = romaja_snprint(yale, size, r);
+    /* Copy string to romaja var */
+    chars_left = romaja_snprint(romaja, size, r);
 
     /*hangeul_destroy(h);
     romaja_destroy(r);*/
 
     return chars_left;
+}
+
+int
+hangeul_to_yale_original(char *romaja, size_t size, const char *hangeul)
+{
+
+}
+
+int
+hangeul_to_mccune_reischauer(char *romaja, size_t size, const char *hangeul)
+{
+
+}
+
+int
+hangeul_to_revised(char *romaja, size_t size, const char *hangeul)
+{
+
 }
 
 int
@@ -94,6 +73,7 @@ hangeul_parse_str(Hangeul** hangeulRef, const char *source)
     char hangeul[3];
 
     while ((next = source[i]) != '\0') {
+        if (next > )
         i++;
     }
 
@@ -188,9 +168,10 @@ hangeul_push(Hangeul **hangeul, ucschar combined)
 }
 
 void
-romaja_push(Romaja **romaja, ucschar character)
+romaja_push(Romaja **romaja, ucschar initial[4], ucschar vowel[4], ucschar final[4], ucschar nonhangeul, ucschar combined, SyllableType syllable_type)
 {
     /* Add to most recent syllable or create new syllable to add to. */
+
 }
 
 int
