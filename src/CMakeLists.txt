@@ -1,5 +1,5 @@
-add_library(hangeul-romaja SHARED hangeul-romaja.c yale.c yale_original.c mccune_reischauer.c revised_romanization.c ipa.c)
-add_library(hangeul-romaja_static STATIC hangeul-romaja.c yale.c yale_original.c mccune_reischauer.c revised_romanization.c ipa.c)
+add_library(hangeul-romaja SHARED hangeul-romaja.c yale.c yale_original.c mccune_reischauer.c revised_romanization.c ipa.c parser.c)
+add_library(hangeul-romaja_static STATIC hangeul-romaja.c yale.c yale_original.c mccune_reischauer.c revised_romanization.c ipa.c parser.c)
 
 if(APPLE)
 	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libhangeul-romaja.dylib DESTINATION lib)

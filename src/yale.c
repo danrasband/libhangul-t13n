@@ -7,15 +7,15 @@
 int
 _hangeul_to_yale(Romaja **yaleRef, const Hangeul *hangeul) {
     const Hangeul *ptr = hangeul;
-    ucschar initial[4];
-    ucschar vowel[4];
-    ucschar final[4];
-    ucschar nonhangeul;
+    utf8char initial[4];
+    utf8char vowel[4];
+    utf8char final[4];
+    utf8char nonhangeul;
     SyllableType syllable_type;
 
     while (ptr != NULL) {
         // romaja_push(yaleRef, )
-        ptr = hangeul->next;
+        ptr = ptr->next;
     }
 
 }

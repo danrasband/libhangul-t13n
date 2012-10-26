@@ -18,13 +18,14 @@ test_main()
 
     hangeul_to_yale(yale_str, size, hangeul_str);
     if (strlen(yale_str) > 0) {
-        yale_str = realloc(yale_str, strlen(yale_str));
+        yale_str = realloc(yale_str, strlen(yale_str) + 1);
     }
 
     if (strcmp(yale_str, "a") == 0) {
         free(yale_str);
         return 0;
     }
+
     free(yale_str);
     return 1;
 }
