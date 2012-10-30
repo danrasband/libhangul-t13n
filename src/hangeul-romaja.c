@@ -20,8 +20,6 @@ int hangeul_puts(const Hangeul* hangeul);
 int hangeul_snprint(char *dest, size_t size, const Hangeul* hangeul);
 int hangeul_strlen(const Hangeul *hangeul);
 int romaja_strlen(const Romaja *romaja);
-void hangeul_push(Hangeul **hangeulRef, utf8char *choseong, utf8char *jungseong, utf8char *jongseong, utf8char *nonhangeul, utf8char *combined, SyllableType syllable_type);
-void romaja_push(Romaja **romajaRef, utf8char initial[4], utf8char vowel[4], utf8char final[4], utf8char nonhangeul, utf8char combined, SyllableType syllable_type);
 
 int
 hangeul_to_yale(char *romaja, size_t size, const char *hangeul)
@@ -115,7 +113,7 @@ int
 romaja_strlen(const Romaja *romaja)
 {
     int len = 0;
-    Romaja *current = malloc(sizeof(Romaja));
+    //Romaja *current = malloc(sizeof(Romaja));
     // *current = *romaja;
 
     /*while (current != NULL) {
@@ -136,83 +134,10 @@ romaja_strlen(const Romaja *romaja)
             }
         }
         current = sentence->next;
-    }*/
+    }
 
     romaja_destroy(current);
+     */
 
     return len;
 }
-
-void
-hangeul_push(Hangeul **hangeulRef, utf8char *choseong, utf8char *jungseong, utf8char *jongseong, utf8char *nonhangeul, utf8char *combined, SyllableType syllable_type)
-{
-    /* Parse combined character into nonhangeul or choseong, jungseong,
-    jongseong */
-    Hangeul *newHangeul = (Hangeul *)malloc(sizeof(Hangeul));
-
-    strncpy(newHangeul->choseong, choseong, 3);
-    strncpy(newHangeul->jungseong, jungseong, 3);
-    strncpy(newHangeul->jongseong, jongseong, 3);
-    strncpy(newHangeul->nonhangeul, nonhangeul, 6);
-    strncpy(newHangeul->combined, combined, 6);
-    newHangeul->syllable_type = syllable_type;
-
-    newHangeul->next = *hangeulRef;
-    (*hangeulRef) = newHangeul;
-}
-
-void
-romaja_push(Romaja **romajaRef, utf8char initial[4], utf8char vowel[4], utf8char final[4], utf8char nonhangeul, utf8char combined, SyllableType syllable_type)
-{
-    /* Add to most recent syllable or create new syllable to add to. */
-
-}
-
-int
-hangeul_destroy(Hangeul **hangeulRef)
-{
-    Hangeul *current = *hangeulRef;
-    Hangeul *next;
-
-    while (current != NULL) {
-        next = current->next;
-        free(current);
-        current = next;
-    }
-
-    *hangeulRef = NULL;
-}
-
-int
-romaja_destroy(Romaja **romajaRef)
-{
-    Romaja *current = *romajaRef;
-    Romaja *next;
-
-    while (current != NULL) {
-        next = current->next;
-        free(current);
-        current = next;
-    }
-
-    *romajaRef = NULL;
-}
-
-utf8char
-_hangeul_get_choseong(utf8char combined)
-{
-
-}
-
-utf8char
-_hangeul_get_jungseong(utf8char combined)
-{
-
-}
-
-utf8char
-_hangeul_get_jongseong(utf8char combined)
-{
-
-}
-

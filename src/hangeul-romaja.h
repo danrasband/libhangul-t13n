@@ -27,5 +27,4 @@ int hangeul_from_yale_original(char *hangeul, size_t, const char *romaja);
 int hangeul_from_revised_romanization(char *hangeul, size_t, const char *romaja);
 int hangeul_from_mccune_reischauer(char *hangeul, size_t, const char *romaja);
 
-
 #endif

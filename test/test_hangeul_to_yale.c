@@ -21,6 +21,8 @@ test_main()
         yale_str = realloc(yale_str, strlen(yale_str) + 1);
     }
 
+    printf("'%s'\n", yale_str);
+
     if (strcmp(yale_str, "a") == 0) {
         free(yale_str);
         return 0;

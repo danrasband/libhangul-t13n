@@ -8,6 +8,7 @@
 #include <stdio.h>
 
 typedef uint8_t utf8char;
+typedef uint32_t ucschar;
 static const utf8char UTF8EOF = (uint8_t)EOF;
 
 /* Data structures */
@@ -22,11 +23,12 @@ typedef enum SyllableType {
 struct _Hangeul {
     Hangeul *prev;
 
-    utf8char choseong[4];
-    utf8char jungseong[4];
-    utf8char jongseong[4];
-    utf8char nonhangeul[7];
-    utf8char combined[7];
+    ucschar choseong;
+    ucschar jungseong;
+    ucschar jongseong;
+    ucschar nonhangeul;
+    ucschar combined;
+
     SyllableType syllable_type;
 
     Hangeul *next;
@@ -35,14 +37,24 @@ struct _Hangeul {
 struct _Romaja {
     Romaja *prev;
 
-    utf8char initial[4];
-    utf8char vowel[4];
-    utf8char final[4];
-    utf8char nonhangeul;
-    utf8char combined;
+    ucschar initial[4];
+    ucschar vowel[4];
+    ucschar final[4];
+    ucschar nonhangeul;
+    ucschar combined[8];
+
     SyllableType syllable_type;
 
     Romaja *next;
 };
+
+void hangeul_push(Hangeul **hangeulRef, ucschar choseong, ucschar jungseong, ucschar jongseong, ucschar nonhangeul, ucschar combined, SyllableType syllable_type);
+void romaja_push(Romaja **romajaRef, ucschar initial[4], ucschar vowel[4], ucschar final[4], ucschar nonhangeul, ucschar combined[8], SyllableType syllable_type);
+
+int hangeul_destroy(Hangeul **hangeulRef);
+int romaja_destroy(Romaja **romajaRef);
+
+size_t utf8_strlen(const utf8char *str);
+size_t ucs_strlen(const ucschar *str);
 
 #endif
