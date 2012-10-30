@@ -1,7 +1,9 @@
 file(GLOB hangeul_romaja_srcs *.c)
 
 add_library(hangeul-romaja SHARED ${hangeul_romaja_srcs})
+target_link_libraries(hangeul-romaja m)
 add_library(hangeul-romaja_static STATIC ${hangeul_romaja_srcs})
+target_link_libraries(hangeul-romaja_static m)
 
 if(APPLE)
 	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libhangeul-romaja.dylib DESTINATION lib)

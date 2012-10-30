@@ -3,7 +3,7 @@
  */
 #include <stdio.h>
 #include <string.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include "parser.h"
 #include "encoding.h"
 
@@ -29,14 +29,21 @@ hangeul_parse_str(Hangeul** hangeulRef, size_t size, const char *source)
     ucs_str = malloc(strlen(source) * sizeof(ucschar) + sizeof(ucschar));
 
     overflow = utf8_to_ucs(ucs_str, strlen(source) * sizeof(ucschar), source);
+
+    printf("overflow: %d\n", overflow);
+
     while (overflow > 0) {
         ucs_str = realloc(ucs_str, sizeof(ucs_str) + overflow);
         overflow = utf8_to_ucs(ucs_str, sizeof(ucs_str), source);
     }
+
     /* realloc down */
-    ucs_str = realloc(ucs_str, ucs_strlen(ucs_str) * sizeof(ucs_str) + sizeof(ucschar));
+    /*ucs_str = realloc(ucs_str, ucs_strlen(ucs_str) * sizeof(ucs_str) + sizeof(ucschar));*/
     length = ucs_strlen(ucs_str);
+    printf("ucs_str[0] in parser: %x\n", ucs_str[0]);
+    printf("length: %d\n", length);
     for (i = 0; i < length; i++) {
+        printf("ucs_str[%d]: %x\n", i, ucs_str[i]);
         current = ucs_str[i];
         if (ucs_is_hangeul(current)) {
             choseong = ucs_hangeul_choseong(current);

@@ -1,7 +1,7 @@
 /**
  * Copyright 2012 Daniel C. Rasband
  */
-#include <malloc.h>
+#include <stdlib.h>
 #include <string.h>
 #include "types.h"
 
@@ -72,5 +72,10 @@ utf8_strlen(const utf8char *str)
 size_t
 ucs_strlen(const ucschar *str)
 {
-    return (size_t)(strlen((char *)str) / sizeof(ucschar));
+    size_t len = 0;
+    ucschar current;
+
+    while ((current = str[len++]) != (ucschar)'\0');
+
+    return len;
 }
