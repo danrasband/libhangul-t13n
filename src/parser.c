@@ -26,12 +26,9 @@ hangeul_parse_str(Hangeul** hangeulRef, size_t size, const char *source)
 
     ucschar *ucs_str = NULL;
 
-    printf("%lu\n", strlen(source) * sizeof(ucschar) + sizeof(ucschar));
-    ucs_str = malloc(2 * (strlen(source) * sizeof(ucschar) + sizeof(ucschar)));
+    ucs_str = malloc(strlen(source) * sizeof(ucschar) + sizeof(ucschar));
 
-    printf("about to convert utf8 to ucs - %lu : %lu\n", sizeof(ucs_str), strlen(source) * sizeof(ucschar) + sizeof(ucschar));
     overflow = utf8_to_ucs(ucs_str, strlen(source) * sizeof(ucschar), source);
-    printf("converted utf8 to ucs with overflow of %d\n", overflow);
     while (overflow > 0) {
         ucs_str = realloc(ucs_str, sizeof(ucs_str) + overflow);
         overflow = utf8_to_ucs(ucs_str, sizeof(ucs_str), source);

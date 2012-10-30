@@ -71,7 +71,6 @@ ucschar utf8_ucs_sub_value(utf8char byte);
 int
 utf8_to_ucs(ucschar *dest, size_t size, const char *orig)
 {
-    assert(sizeof(dest) >= size);
     int i;
     int len = strlen(orig);
     bool is_last = false;
@@ -116,7 +115,6 @@ utf8_to_ucs(ucschar *dest, size_t size, const char *orig)
 
         switch (charType) {
             case ONE_BYTE:
-                assert(utf8_strlen(tmp) == 0);
                 tmp[0] = current;
                 is_last = true;
                 break;
