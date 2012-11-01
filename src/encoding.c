@@ -45,7 +45,13 @@ typedef enum utf8CharType {
 #define UTF8_SIX_BYTE_MASK      0xFC /* 0b11111100 */
 #define UTF8_SIX_BYTE_UCS       0x04000000
 #define IS_SIX_BYTE_UTF8(byte)  (UTF8_SIX_BYTE_MASK & byte) == UTF8_SIX_BYTE_MASK
-#define UTF8_SUB_BYTE_MASK      0x80 /* 0b10000000 */
+
+#define UTF8_SUB_BYTE_MASK              0x80 /* 0b10000000 */
+#define UTF8_TWO_BYTE_FIRST_SUB_BYTE    0x80
+#define UTF8_THREE_BYTE_FIRST_SUB_BYTE  0xa0 /* 0x80 | (0x80 >> 2) */
+#define UTF8_FOUR_BYTE_FIRST_SUB_BYTE   0x90 /* 0x80 | (0x80 >> 3) */
+#define UTF8_FIVE_BYTE_FIRST_SUB_BYTE   0x88 /* 0x80 | (0x80 >> 4) */
+#define UTF8_SIX_BYTE_FIRST_SUB_BYTE    0x84 /* 0x80 | (0x80 >> 5) */
 
 #define UTF8_FIRST_BYTE_START   0xC0
 #define UTF8_FIRST_BYTE_END     0xFD
@@ -54,19 +60,7 @@ typedef enum utf8CharType {
 
 #define UTF8_MAX_BYTES 6
 
-#define IS_LAST_BYTE(groupType, length) (((groupType == ONE_BYTE) && length >= 1) || \
-    ((groupType == TWO_BYTES) && length >= 2) || \
-    ((groupType == THREE_BYTES) && length >= 3) || \
-    ((groupType == FOUR_BYTES) && length >= 4) || \
-    ((groupType == FIVE_BYTES) && length >= 5) || \
-    ((groupType == SIX_BYTES) && length >= 6))
-
-/* Declarations */
-size_t utf8_strlen(const utf8char *str);
-size_t ucs_strlen(const ucschar *str);
-ucschar parse_utf8_str(size_t length, utf8char sequence[]);
-ucschar utf8_ucs_start_value(utf8char byte);
-ucschar utf8_ucs_sub_value(utf8char byte);
+#define UTF8_MASK_MATCH(MASK, byte) ((MASK & byte) == MASK)
 
 int
 utf8_to_ucs(ucschar *dest, size_t size, const char *orig)
@@ -75,93 +69,93 @@ utf8_to_ucs(ucschar *dest, size_t size, const char *orig)
     int len = strlen(orig);
     int returnValue = 0;
     bool is_last = false;
-    utf8char current;
-    utf8char tmp[UTF8_MAX_BYTES + 1] = {'\0'};
-    utf8CharType charType = ONE_BYTE;
-    utf8CharType charGroupType = ONE_BYTE;
+
+    utf8char z, y, x, w, v, u;
     ucschar *ucs_str = (ucschar *)malloc(strlen(orig) * sizeof(ucschar));
+    int ucs_str_index = 0;
 
     /* Loop through each byte */
-    for (i = 0; i < len; i++) {
-        is_last = false;
-        current = (utf8char)orig[i];
-        if (utf8_strlen(tmp) == 0) {
-            if ((UTF8_SIX_BYTE_MASK & current) == UTF8_SIX_BYTE_MASK) {
-                charType = SIX_BYTES;
-                charGroupType = SIX_BYTES;
-            }
-            else if ((UTF8_FIVE_BYTE_MASK & current) == UTF8_FIVE_BYTE_MASK) {
-                charType = FIVE_BYTES;
-                charGroupType = FIVE_BYTES;
-            }
-            else if ((UTF8_FOUR_BYTE_MASK & current) == UTF8_FOUR_BYTE_MASK) {
-                charType = FOUR_BYTES;
-                charGroupType = FOUR_BYTES;
-            }
-            else if ((UTF8_THREE_BYTE_MASK & current) == UTF8_THREE_BYTE_MASK) {
-                charType = THREE_BYTES;
-                charGroupType = THREE_BYTES;
-            }
-            else if ((UTF8_TWO_BYTE_MASK & current) == UTF8_TWO_BYTE_MASK) {
-                charType = TWO_BYTES;
-                charGroupType = TWO_BYTES;
-            }
-            else if ((UTF8_ONE_BYTE_MASK & current) == UTF8_ONE_BYTE_MASK) {
-                charType = ONE_BYTE;
-            }
-            else {
-                assert(false);
-            }
+    for (i = 0; i < len;) {
+        z = (ucschar)orig[i++];
+        printf("%x\n", z);
+
+        if (UTF8_MASK_MATCH(UTF8_SIX_BYTE_MASK, z)) {
+            assert(i <= len - 5);
+            if (i >= len - 5) break;
+
+            y = (ucschar)orig[i++];
+            x = (ucschar)orig[i++];
+            w = (ucschar)orig[i++];
+            v = (ucschar)orig[i++];
+            u = (ucschar)orig[i++];
+
+            ucs_str[ucs_str_index++] = ((z - UTF8_SIX_BYTE_MASK) * pow(64, 5))
+                + ((y - 0x80) * pow(64, 4))
+                + ((x - 0x80) * pow(64, 3))
+                + ((w - 0x80) * pow(64, 2))
+                + ((v - 0x80) * 64)
+                + (u - 0x80);
         }
-        else if ((UTF8_SUB_BYTE_MASK & current) == UTF8_SUB_BYTE_MASK) {
-            charType = SUB_BYTE;
+        else if (UTF8_MASK_MATCH(UTF8_FIVE_BYTE_MASK, z)) {
+            assert(i <= len - 4);
+            if (i >= len - 4) break;
+
+            y = (ucschar)orig[i++];
+            x = (ucschar)orig[i++];
+            w = (ucschar)orig[i++];
+            v = (ucschar)orig[i++];
+
+            ucs_str[ucs_str_index++] = ((z - UTF8_FIVE_BYTE_MASK) * pow(64, 4))
+                + ((y - 0x80) * pow(64, 3))
+                + ((x - 0x80) * pow(64, 2))
+                + ((w - 0x80) * 64)
+                + (v - 0x80);
+        }
+        else if (UTF8_MASK_MATCH(UTF8_FOUR_BYTE_MASK, z)) {
+            assert(i <= len - 3);
+            if (i >= len - 3) break;
+
+            y = (ucschar)orig[i++];
+            x = (ucschar)orig[i++];
+            w = (ucschar)orig[i++];
+
+            ucs_str[ucs_str_index++] = ((z - UTF8_FOUR_BYTE_MASK) * pow(64, 3))
+                + ((y - 0x80) * pow(64, 2))
+                + ((x - 0x80) * 64)
+                + (w - 0x80);
+        }
+        else if (UTF8_MASK_MATCH(UTF8_THREE_BYTE_MASK, z)) {
+            assert(i <= len - 2);
+            if (i > len - 2) break;
+
+            y = (ucschar)orig[i++];
+            x = (ucschar)orig[i++];
+
+            ucs_str[ucs_str_index++] = ((z - UTF8_THREE_BYTE_MASK) * pow(64, 2))
+                + ((y - 0x80) * 64)
+                + (x - 0x80);
+        }
+        else if (UTF8_MASK_MATCH(UTF8_TWO_BYTE_MASK, z)) {
+            assert(i < len - 1);
+            if (i > len - 1) break;
+
+            y = (ucschar)orig[i++];
+
+            ucs_str[ucs_str_index++] = ((z - UTF8_TWO_BYTE_MASK) * 64)
+                + (y - 0x80);
+        }
+        else if (UTF8_MASK_MATCH(UTF8_ONE_BYTE_MASK, z)) {
+            assert(i < len);
+            if (i > len) break;
+
+            ucs_str[ucs_str_index++] = z;
         }
         else {
             assert(false);
         }
-
-        switch (charType) {
-            case ONE_BYTE:
-                tmp[0] = current;
-                is_last = true;
-                break;
-            case TWO_BYTES:
-                tmp[0] = current;
-                break;
-            case THREE_BYTES:
-                tmp[0] = current;
-                break;
-            case FOUR_BYTES:
-                tmp[0] = current;
-                break;
-            case FIVE_BYTES:
-                tmp[0] = current;
-                break;
-            case SIX_BYTES:
-                tmp[0] = current;
-                break;
-            case SUB_BYTE:
-                tmp[utf8_strlen(tmp)] = current;
-                if (IS_LAST_BYTE(charGroupType, utf8_strlen(tmp))) {
-                    is_last = true;
-                }
-                break;
-        }
-
-        if (is_last) {
-            printf("parsed utf8 str: %x\n", parse_utf8_str(utf8_strlen(tmp), tmp));
-            printf("ucs strlen: %lu\n", ucs_strlen(ucs_str));
-            ucs_str[(int)ucs_strlen(ucs_str)] = parse_utf8_str(utf8_strlen(tmp), tmp);
-            memset(tmp, '\0', UTF8_MAX_BYTES * sizeof(utf8char));
-            is_last = false;
-        }
     }
 
-    // ucs_str = realloc(ucs_str, ucs_strlen(ucs_str) * sizeof(ucschar) + sizeof(ucschar));
-
-    printf("line 161: ucs_str[0]: %x\n", ucs_str[0]);
     memcpy(dest, ucs_str, size);
-    printf("line 163: dest[0]: %x\n", dest[0]);
 
     returnValue = ucs_strlen(ucs_str) - size;
 
@@ -173,60 +167,6 @@ int
 ucs_to_utf8(char *dest, size_t size, const ucschar *orig)
 {
 
-}
-
-
-/* Get the UCS integer for the utf8 sequence */
-ucschar
-parse_utf8_str(size_t length, utf8char sequence[])
-{
-    int i;
-    ucschar value = 0;
-
-    for (i = length - 1; i >= 0; i--) {
-        if (i == 0) {
-            value += utf8_ucs_start_value(sequence[i]);
-        }
-        else {
-            value += utf8_ucs_sub_value(sequence[i]) * pow((UTF8_SUB_BYTE_END - UTF8_SUB_BYTE_START), i);
-        }
-    }
-
-    return value;
-}
-
-ucschar
-utf8_ucs_start_value(utf8char byte)
-{
-    ucschar result = 0;
-    if (IS_TWO_BYTE_UTF8(byte)) {
-        result = UTF8_TWO_BYTE_UCS + (byte - (UTF8_TWO_BYTE_MASK | UTF8_FIRST_BYTE_START));
-    }
-    else if (IS_THREE_BYTE_UTF8(byte)) {
-        result = UTF8_THREE_BYTE_UCS + (byte - (UTF8_THREE_BYTE_MASK | UTF8_FIRST_BYTE_START));
-    }
-    else if (IS_FOUR_BYTE_UTF8(byte)) {
-        result = UTF8_FOUR_BYTE_UCS + (byte - (UTF8_FOUR_BYTE_MASK | UTF8_FIRST_BYTE_START));
-    }
-    else if (IS_FIVE_BYTE_UTF8(byte)) {
-        result = UTF8_FIVE_BYTE_UCS + (byte - (UTF8_FIVE_BYTE_MASK | UTF8_FIRST_BYTE_START));
-    }
-    else if (IS_SIX_BYTE_UTF8(byte)) {
-        result = UTF8_SIX_BYTE_UCS + (byte - (UTF8_SIX_BYTE_MASK | UTF8_FIRST_BYTE_START));
-    }
-    return result;
-}
-
-ucschar
-utf8_ucs_sub_value(utf8char byte)
-{
-    assert((UTF8_SUB_BYTE_MASK & byte) == UTF8_SUB_BYTE_MASK);
-    assert(byte <= UTF8_SUB_BYTE_END);
-    ucschar result = 0;
-
-    result = byte - (UTF8_SUB_BYTE_MASK | UTF8_SUB_BYTE_START);
-
-    return result;
 }
 
 ucschar

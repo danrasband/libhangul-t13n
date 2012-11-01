@@ -72,10 +72,13 @@ utf8_strlen(const utf8char *str)
 size_t
 ucs_strlen(const ucschar *str)
 {
+    int i = 0;
     size_t len = 0;
     ucschar current;
 
-    while ((current = str[len++]) != (ucschar)'\0');
+    while ((current = str[i++]) != (ucschar)'\0') {
+        len++;
+    }
 
     return len;
 }
