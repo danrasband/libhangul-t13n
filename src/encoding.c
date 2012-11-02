@@ -62,6 +62,38 @@ typedef enum utf8CharType {
 
 #define UTF8_MASK_MATCH(MASK, byte) ((MASK & byte) == MASK)
 
+/* TODO Determine how much of the following to support */
+/* Hangul Jamo */
+#define UCS_HANGUL_JAMO_START       0x1100
+#define UCS_HANGUL_JAMO_END         0x11FF
+#define IS_HANGUL_JAMO(c) (c >= UCS_HANGUL_JAMO_START && \
+    c <= UCS_HANGUL_JAMO_END)
+
+/* Hangul Compatibility Jamo set. TODO support? */
+/*
+#define UCS_HANGUL_COMPATIBILITY_JAMO_START 0x3130
+#define UCS_HANGUL_COMPATIBILITY_JAMO_END   0x318f
+*/
+
+/* Hangul Syllables */
+#define UCS_HANGUL_SYLLABLES_START  0xAC00
+#define UCS_HANGUL_SYLLABLES_END    0xD7AF
+#define IS_HANGUL_SYLLABLE(c) (c >= UCS_HANGUL_SYLLABLES_START && \
+    c <= UCS_HANGUL_SYLLABLES_END)
+
+/* Extended. TODO support? */
+/*
+#define UCS_HANGUL_JAMO_EXTENDED_A_START    0xA960
+#define UCS_HANGUL_JAMO_EXTENDED_A_END      0xA97F
+#define UCS_HANGUL_JAMO_EXTENDED_B_START    0xD7B0
+#define UCS_HANGUL_JAMO_EXTENDED_A_END      0xD7FF
+*/
+
+/* Number of jaum, moum, and pachim. */
+#define UCS_HANGUL_SYLLABLES_JAUM_COUNT     19
+#define UCS_HANGUL_SYLLABLES_MOUM_COUNT     21
+#define UCS_HANGUL_SYLLABLES_PACHIM_COUNT   28
+
 int
 utf8_to_ucs(ucschar *dest, size_t size, const char *orig)
 {
@@ -166,25 +198,97 @@ utf8_to_ucs(ucschar *dest, size_t size, const char *orig)
 int
 ucs_to_utf8(char *dest, size_t size, const ucschar *orig)
 {
+    int returnValue = 0;
+    int len = (int)ucs_strlen(orig);
+    int destIndex = 0;
+    int i;
+    ucschar current;
 
+    utf8char utf8_str[len * UTF8_MAX_BYTES];
+    for (i = 0; i < len; i++) {
+        utf8_str[i] = '\0';
+    }
+
+    for (i = 0; i < len; i++) {
+        current = orig[i];
+
+        if (current >= UTF8_SIX_BYTE_UCS) {
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + (current / pow(64, 5)));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + ((int)(current / pow(64, 4)) % 64));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + ((int)(current / pow(64, 3)) % 64));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + ((int)(current / pow(64, 2)) % 64));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + ((int)(current / 64) % 64));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + (current % 64));
+        }
+        else if (current >= UTF8_FIVE_BYTE_UCS) {
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + (current / pow(64, 4)));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + ((int)(current / pow(64, 3)) % 64));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + ((int)(current / pow(64, 2)) % 64));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + ((int)(current / 64) % 64));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + (current % 64));
+        }
+        else if (current >= UTF8_FOUR_BYTE_UCS) {
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + (current / pow(64, 3)));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + ((int)(current / pow(64, 2)) % 64));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + ((int)(current / 64) % 64));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + (current % 64));
+        }
+        else if (current >= UTF8_THREE_BYTE_UCS) {
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + (current / pow(64, 2)));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + ((int)(current / 64) % 64));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + (current % 64));
+
+        }
+        else if (current >= UTF8_TWO_BYTE_UCS) {
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + (current / 64));
+            utf8_str[destIndex++] = (utf8char)(UTF8_SIX_BYTE_MASK + (current % 64));
+        }
+        else {
+            utf8_str[destIndex++] = (utf8char)current;
+        }
+    }
+
+    memcpy(dest, utf8_str, size);
+
+    returnValue = utf8_strlen(utf8_str) - size;
+
+    return returnValue;
 }
 
-ucschar
-ucs_hangeul_choseong(ucschar c)
+int
+ucs_hangeul_choseong_index(ucschar c)
 {
+    int index = -1;
 
+    if (IS_HANGUL_SYLLABLE(c)) {
+        index = (int)(((c - UCS_HANGUL_SYLLABLES_START) / (UCS_HANGUL_SYLLABLES_MOUM_COUNT * UCS_HANGUL_SYLLABLES_PACHIM_COUNT)) % UCS_HANGUL_SYLLABLES_JAUM_COUNT);
+    }
+
+    return index;
 }
 
-ucschar
-ucs_hangeul_jungseong(ucschar c)
+int
+ucs_hangeul_jungseong_index(ucschar c)
 {
+    int index = -1;
 
+    if (IS_HANGUL_SYLLABLE(c)) {
+        index = (int)(((c - UCS_HANGUL_SYLLABLES_START) / (UCS_HANGUL_SYLLABLES_JAUM_COUNT * UCS_HANGUL_SYLLABLES_PACHIM_COUNT)) % UCS_HANGUL_SYLLABLES_MOUM_COUNT);
+    }
+
+    return index;
 }
 
-ucschar
-ucs_hangeul_jongseong(ucschar c)
+int
+ucs_hangeul_jongseong_index(ucschar c)
 {
+    int index = -1;
 
+    if (IS_HANGUL_SYLLABLE(c)) {
+        index = (int)((c - UCS_HANGUL_SYLLABLES_START) / (UCS_HANGUL_SYLLABLES_MOUM_COUNT * UCS_HANGUL_SYLLABLES_PACHIM_COUNT));
+    }
+
+    return index;
 }
 
 bool

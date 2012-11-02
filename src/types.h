@@ -23,9 +23,9 @@ typedef enum SyllableType {
 struct _Hangeul {
     Hangeul *prev;
 
-    ucschar choseong;
-    ucschar jungseong;
-    ucschar jongseong;
+    int choseong;
+    int jungseong;
+    int jongseong;
     ucschar nonhangeul;
     ucschar combined;
 

@@ -16,11 +16,11 @@ hangeul_parse_str(Hangeul** hangeulRef, size_t size, const char *source)
     int length;
     ucschar current;
 
-    ucschar choseong;
-    ucschar jungseong;
-    ucschar jongseong;
-    ucschar nonhangeul;
+    int choseong;
+    int jungseong;
+    int jongseong;
     ucschar combined;
+    ucschar nonhangeul;
 
     SyllableType syllable_type;
 
@@ -46,21 +46,26 @@ hangeul_parse_str(Hangeul** hangeulRef, size_t size, const char *source)
         printf("ucs_str[%d]: %x\n", i, ucs_str[i]);
         current = ucs_str[i];
         if (ucs_is_hangeul(current)) {
-            choseong = ucs_hangeul_choseong(current);
-            jungseong = ucs_hangeul_jungseong(current);
-            jongseong = ucs_hangeul_jongseong(current);
+            puts("Is hangeul.");
+            choseong = ucs_hangeul_choseong_index(current);
+            jungseong = ucs_hangeul_jungseong_index(current);
+            jongseong = ucs_hangeul_jongseong_index(current);
             combined = current;
             syllable_type = HANGEUL;
+            printf("%x, %x, %x, %x, %x\n", choseong, jungseong, jongseong, combined, syllable_type);
         }
         else {
-            choseong = 0;
-            jungseong = 0;
-            jongseong = 0;
-            combined = 0;
+            choseong = -1;
+            jungseong = -1;
+            jongseong = -1;
+            combined = -1;
+            nonhangeul = current;
             syllable_type = NONHANGEUL;
         }
         hangeul_push(hangeulRef, choseong, jungseong, jongseong, nonhangeul, combined, syllable_type);
     }
+
+    free(ucs_str);
 
     return success;
 }
