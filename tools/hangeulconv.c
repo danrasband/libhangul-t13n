@@ -81,13 +81,13 @@ main(int argc, char *argv[])
 
       /* Input filename */
       case 'i':
-        input_filename = malloc(strlen(optarg) * sizeof(char));
+        input_filename = malloc((strlen(optarg) + 1) * sizeof *input_filename);
         strcpy(input_filename, optarg);
         break;
 
       /* Output filename. */
       case 'o':
-        output_filename = malloc(strlen(optarg) * sizeof(char));
+        output_filename = malloc((strlen(optarg) + 1) * sizeof *output_filename);
         strcpy(output_filename, optarg);
         break;
 

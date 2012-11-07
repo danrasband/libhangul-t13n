@@ -3,31 +3,80 @@
  */
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include "types.h"
 
 void
-hangeul_push(Hangeul **hangeulRef, ucschar choseong, ucschar jungseong, ucschar jongseong, ucschar nonhangeul, ucschar combined, SyllableType syllable_type)
+hangeul_push(Hangeul **hangeulRef, int choseong, int jungseong, int jongseong, ucschar combined, SyllableType syllable_type)
 {
     /* Parse combined character into nonhangeul or choseong, jungseong,
     jongseong */
-    Hangeul *newHangeul = (Hangeul *)malloc(sizeof(Hangeul));
+    Hangeul *newHangeul = malloc(sizeof *newHangeul);
 
     newHangeul->choseong = choseong;
     newHangeul->jungseong = jungseong;
     newHangeul->jongseong = jongseong;
-    newHangeul->nonhangeul = nonhangeul;
     newHangeul->combined = combined;
     newHangeul->syllable_type = syllable_type;
 
-    newHangeul->next = *hangeulRef;
+    newHangeul->next = (*hangeulRef);
     (*hangeulRef) = newHangeul;
 }
 
 void
-romaja_push(Romaja **romajaRef, ucschar initial[4], ucschar vowel[4], ucschar final[4], ucschar nonhangeul, ucschar combined[8], SyllableType syllable_type)
+romaja_push(Romaja **romajaRef, char *initial, char *vowel, char *final, char *combined, SyllableType syllable_type)
 {
     /* Add to most recent syllable or create new syllable to add to. */
+    Romaja *newRomaja = malloc(sizeof *newRomaja);
 
+    if (syllable_type == HANGEUL) {
+        assert(initial != NULL && vowel != NULL && final != NULL);
+
+        newRomaja->initial = malloc((strlen(initial) + 1) * sizeof newRomaja->(*initial));
+        strncpy(newRomaja->initial, initial, (strlen(final) + 1) * sizeof newRomaja->(*final));
+
+        newRomaja->vowel = malloc((strlen(vowel) + 1) * sizeof newRomaja->(*vowel));
+        strncpy(newRomaja->vowel, vowel, (strlen(final) + 1) * sizeof newRomaja->(*final));
+
+        newRomaja->final = malloc((strlen(final) + 1) * sizeof newRomaja->(*final));
+        strncpy(newRomaja->final, final, (strlen(final) + 1) * sizeof newRomaja->(*final));
+    }
+
+    newRomaja->combined = malloc((strlen(combined) + 1) * sizeof newRomaja->(*combined));
+    strncpy(newRomaja->combined, combined, (strlen(combined) + 1) * sizeof newRomaja->(*combined));
+
+    newRomaja->syllable_type = syllable_type;
+
+    newRomaja->next = (*romajaRef);
+    (*romajaRef) = newRomaja;
+}
+
+int
+hangeul_len(const Hangeul *hangeul)
+{
+    int len = 0;
+    const Hangeul *current = hangeul;
+
+    while (current != NULL) {
+        len++;
+        current = current->next;
+    }
+
+    return len;
+}
+
+int
+romaja_len(const Romaja *romaja)
+{
+    int len = 0;
+    const Romaja *current = romaja;
+
+    while (current != NULL) {
+        len++;
+        current = current->next;
+    }
+
+    return len;
 }
 
 int

@@ -16,9 +16,11 @@
 #include "yale_original.h"
 
 /* Declarations */
-int hangeul_puts(const Hangeul* hangeul);
-int hangeul_snprint(char *dest, size_t size, const Hangeul* hangeul);
+int hangeul_puts(const Hangeul *hangeul);
+int hangeul_snprint(char *dest, const Hangeul *hangeul, size_t size);
 int hangeul_strlen(const Hangeul *hangeul);
+int romaja_puts(const Romaja *romaja);
+int romaja_snprint(char *dest, const Romaja *romaja, size_t size);
 int romaja_strlen(const Romaja *romaja);
 
 int
@@ -35,10 +37,10 @@ hangeul_to_yale(char *romaja, size_t size, const char *hangeul)
     _hangeul_to_yale(&r, h);
 
     /* Copy string to romaja var */
-    chars_left = romaja_snprint(romaja, size, r);
+    chars_left = romaja_snprint(romaja, r, size);
 
-    /*hangeul_destroy(h);
-    romaja_destroy(r);*/
+    hangeul_destroy(&h);
+    romaja_destroy(&r);
 
     return chars_left;
 }
@@ -62,35 +64,38 @@ hangeul_to_revised(char *romaja, size_t size, const char *hangeul)
 }
 
 int
-hangeul_puts(const Hangeul* sentence)
+hangeul_puts(const Hangeul* hangeul)
 {
     int success = 0;
     return success;
 }
 
 int
-hangeul_snprint(char *dest, size_t size, const Hangeul* sentence)
+hangeul_snprint(char *dest, const Hangeul* hangeul, size_t size)
 {
     int chars_not_printed = 0;
     return chars_not_printed;
 }
 
 int
-romaja_puts(const Romaja* sentence)
+romaja_puts(const Romaja* romaja)
 {
     int success = 0;
-    char out[romaja_strlen(sentence) + 1];
-    romaja_snprint(out, sizeof(out), sentence);
+    char out[romaja_strlen(romaja) + 1];
+    romaja_snprint(out, romaja, (romaja_strlen(romaja) + 1) * sizeof *out);
     success = puts(out);
     return success;
 }
 
 int
-romaja_snprint(char *dest, size_t size, const Romaja* romaja)
+romaja_snprint(char *dest, const Romaja* romaja, size_t size)
 {
     if (size == 0) {
         return romaja_strlen(romaja);
     }
+
+    /* Prints backwards, by syllable. */
+
 
     return romaja_strlen(romaja) - strlen(dest);
 }
@@ -113,31 +118,28 @@ int
 romaja_strlen(const Romaja *romaja)
 {
     int len = 0;
-    //Romaja *current = malloc(sizeof(Romaja));
-    // *current = *romaja;
+    Romaja *current = malloc(sizeof *current);
+    *current = *romaja;
 
-    /*while (current != NULL) {
+    while (current != NULL) {
         if (current->syllable_type == HANGEUL) {
             if (current->initial != NULL) {
-                len += sizeof(current->initial);
+                len += strlen(current->initial);
             }
             if (current->vowel != NULL) {
-                len += sizeof(current->vowel);
+                len += strlen(current->vowel);
             }
             if (current->final != NULL) {
-                len += sizeof(current->final);
+                len += strlen(current->final);
             }
         }
         else {
-            if (current->nonhangeul) {
-                len += sizeof(current->nonhangeul);
-            }
+            len += strlen(current->combined);
         }
-        current = sentence->next;
+        current = romaja->next;
     }
 
-    romaja_destroy(current);
-     */
+    free(current);
 
     return len;
 }

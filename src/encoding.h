@@ -7,8 +7,8 @@
 #include <stdbool.h>
 #include "types.h"
 
-int utf8_to_ucs(ucschar *dest, size_t size, const char *orig);
-int ucs_to_utf8(char *dest, size_t size, const ucschar *orig);
+int utf8_to_ucs(ucschar *dest, const char *orig, size_t size);
+int ucs_to_utf8(char *dest, const ucschar *orig, size_t size);
 
 int ucs_hangeul_choseong_index(ucschar c);
 int ucs_hangeul_jungseong_index(ucschar c);

@@ -20,21 +20,18 @@ hangeul_parse_str(Hangeul** hangeulRef, size_t size, const char *source)
     int jungseong;
     int jongseong;
     ucschar combined;
-    ucschar nonhangeul;
 
     SyllableType syllable_type;
 
-    ucschar *ucs_str = NULL;
+    ucschar *ucs_str = malloc((strlen(source) + 1) * sizeof *ucs_str);
 
-    ucs_str = malloc(strlen(source) * sizeof(ucschar) + sizeof(ucschar));
-
-    overflow = utf8_to_ucs(ucs_str, strlen(source) * sizeof(ucschar), source);
+    overflow = utf8_to_ucs(ucs_str, source, strlen(source) * sizeof(ucschar));
 
     printf("overflow: %d\n", overflow);
 
     while (overflow > 0) {
         ucs_str = realloc(ucs_str, sizeof(ucs_str) + overflow);
-        overflow = utf8_to_ucs(ucs_str, sizeof(ucs_str), source);
+        overflow = utf8_to_ucs(ucs_str, source, sizeof(ucs_str));
     }
 
     /* realloc down */
@@ -52,17 +49,16 @@ hangeul_parse_str(Hangeul** hangeulRef, size_t size, const char *source)
             jongseong = ucs_hangeul_jongseong_index(current);
             combined = current;
             syllable_type = HANGEUL;
-            printf("%x, %x, %x, %x, %x\n", choseong, jungseong, jongseong, combined, syllable_type);
+            printf("%d, %d, %d, %x, %d\n", choseong, jungseong, jongseong, combined, syllable_type);
         }
         else {
             choseong = -1;
             jungseong = -1;
             jongseong = -1;
-            combined = -1;
-            nonhangeul = current;
+            combined = current;
             syllable_type = NONHANGEUL;
         }
-        hangeul_push(hangeulRef, choseong, jungseong, jongseong, nonhangeul, combined, syllable_type);
+        hangeul_push(hangeulRef, choseong, jungseong, jongseong, combined, syllable_type);
     }
 
     free(ucs_str);

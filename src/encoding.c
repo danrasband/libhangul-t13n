@@ -95,7 +95,7 @@ typedef enum utf8CharType {
 #define UCS_HANGUL_SYLLABLES_PACHIM_COUNT   28
 
 int
-utf8_to_ucs(ucschar *dest, size_t size, const char *orig)
+utf8_to_ucs(ucschar *dest, const char *orig, size_t size)
 {
     int i;
     int len = strlen(orig);
@@ -103,13 +103,12 @@ utf8_to_ucs(ucschar *dest, size_t size, const char *orig)
     bool is_last = false;
 
     utf8char z, y, x, w, v, u;
-    ucschar *ucs_str = (ucschar *)malloc(strlen(orig) * sizeof(ucschar));
+    ucschar *ucs_str = malloc(strlen(orig) * sizeof(ucschar));
     int ucs_str_index = 0;
 
     /* Loop through each byte */
     for (i = 0; i < len;) {
         z = (ucschar)orig[i++];
-        printf("%x\n", z);
 
         if (UTF8_MASK_MATCH(UTF8_SIX_BYTE_MASK, z)) {
             assert(i <= len - 5);
@@ -177,7 +176,7 @@ utf8_to_ucs(ucschar *dest, size_t size, const char *orig)
                 + (y - 0x80);
         }
         else if (UTF8_MASK_MATCH(UTF8_ONE_BYTE_MASK, z)) {
-            assert(i < len);
+            assert(i <= len);
             if (i > len) break;
 
             ucs_str[ucs_str_index++] = z;
@@ -196,7 +195,7 @@ utf8_to_ucs(ucschar *dest, size_t size, const char *orig)
 }
 
 int
-ucs_to_utf8(char *dest, size_t size, const ucschar *orig)
+ucs_to_utf8(char *dest, const ucschar *orig, size_t size)
 {
     int returnValue = 0;
     int len = (int)ucs_strlen(orig);
@@ -259,9 +258,10 @@ int
 ucs_hangeul_choseong_index(ucschar c)
 {
     int index = -1;
+    int base = c - UCS_HANGUL_SYLLABLES_START;
 
     if (IS_HANGUL_SYLLABLE(c)) {
-        index = (int)(((c - UCS_HANGUL_SYLLABLES_START) / (UCS_HANGUL_SYLLABLES_MOUM_COUNT * UCS_HANGUL_SYLLABLES_PACHIM_COUNT)) % UCS_HANGUL_SYLLABLES_JAUM_COUNT);
+        index = (base / UCS_HANGUL_SYLLABLES_PACHIM_COUNT - ucs_hangeul_jungseong_index(c)) / UCS_HANGUL_SYLLABLES_MOUM_COUNT;
     }
 
     return index;
@@ -271,9 +271,10 @@ int
 ucs_hangeul_jungseong_index(ucschar c)
 {
     int index = -1;
+    int base = c - UCS_HANGUL_SYLLABLES_START;
 
     if (IS_HANGUL_SYLLABLE(c)) {
-        index = (int)(((c - UCS_HANGUL_SYLLABLES_START) / (UCS_HANGUL_SYLLABLES_JAUM_COUNT * UCS_HANGUL_SYLLABLES_PACHIM_COUNT)) % UCS_HANGUL_SYLLABLES_MOUM_COUNT);
+        index = (base / UCS_HANGUL_SYLLABLES_PACHIM_COUNT) % UCS_HANGUL_SYLLABLES_MOUM_COUNT;
     }
 
     return index;
@@ -283,9 +284,10 @@ int
 ucs_hangeul_jongseong_index(ucschar c)
 {
     int index = -1;
+    int base = c - UCS_HANGUL_SYLLABLES_START;
 
     if (IS_HANGUL_SYLLABLE(c)) {
-        index = (int)((c - UCS_HANGUL_SYLLABLES_START) / (UCS_HANGUL_SYLLABLES_MOUM_COUNT * UCS_HANGUL_SYLLABLES_PACHIM_COUNT));
+        index = (int)(base % UCS_HANGUL_SYLLABLES_PACHIM_COUNT);
     }
 
     return index;
@@ -294,5 +296,5 @@ ucs_hangeul_jongseong_index(ucschar c)
 bool
 ucs_is_hangeul(ucschar c)
 {
-
+    return (bool)IS_HANGUL_SYLLABLE(c);
 }

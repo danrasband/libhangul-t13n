@@ -23,10 +23,12 @@ typedef enum SyllableType {
 struct _Hangeul {
     Hangeul *prev;
 
+    /* Indexes */
     int choseong;
     int jungseong;
     int jongseong;
-    ucschar nonhangeul;
+
+    /* The whole UCS character */
     ucschar combined;
 
     SyllableType syllable_type;
@@ -37,19 +39,23 @@ struct _Hangeul {
 struct _Romaja {
     Romaja *prev;
 
-    ucschar initial[4];
-    ucschar vowel[4];
-    ucschar final[4];
-    ucschar nonhangeul;
-    ucschar combined[8];
+    /* These "strings" could be McCune-Reischauer utf8 chars or IPA characters
+       that don't exist in the ASCII charset. */
+    char *initial;
+    char *vowel;
+    char *final;
+    char *combined;
 
     SyllableType syllable_type;
 
     Romaja *next;
 };
 
-void hangeul_push(Hangeul **hangeulRef, ucschar choseong, ucschar jungseong, ucschar jongseong, ucschar nonhangeul, ucschar combined, SyllableType syllable_type);
-void romaja_push(Romaja **romajaRef, ucschar initial[4], ucschar vowel[4], ucschar final[4], ucschar nonhangeul, ucschar combined[8], SyllableType syllable_type);
+void hangeul_push(Hangeul **hangeulRef, int choseong, int jungseong, int jongseong, ucschar combined, SyllableType syllable_type);
+void romaja_push(Romaja **romajaRef, char *initial, char *vowel, char *final, char *combined, SyllableType syllable_type);
+
+int hangeul_len(const Hangeul *hangeul);
+int romaja_len(const Romaja *romaja);
 
 int hangeul_destroy(Hangeul **hangeulRef);
 int romaja_destroy(Romaja **romajaRef);
