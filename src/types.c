@@ -32,18 +32,18 @@ romaja_push(Romaja **romajaRef, char *initial, char *vowel, char *final, char *c
     if (syllable_type == HANGEUL) {
         assert(initial != NULL && vowel != NULL && final != NULL);
 
-        newRomaja->initial = malloc((strlen(initial) + 1) * sizeof newRomaja->(*initial));
-        strncpy(newRomaja->initial, initial, (strlen(final) + 1) * sizeof newRomaja->(*final));
+        newRomaja->initial = malloc((strlen(initial) + 1) * sizeof(*(newRomaja->initial)));
+        strncpy(newRomaja->initial, initial, (strlen(final) + 1) * sizeof(*(newRomaja->final)));
 
-        newRomaja->vowel = malloc((strlen(vowel) + 1) * sizeof newRomaja->(*vowel));
-        strncpy(newRomaja->vowel, vowel, (strlen(final) + 1) * sizeof newRomaja->(*final));
+        newRomaja->vowel = malloc((strlen(vowel) + 1) * sizeof(*(newRomaja->vowel)));
+        strncpy(newRomaja->vowel, vowel, (strlen(final) + 1) * sizeof(*(newRomaja->final)));
 
-        newRomaja->final = malloc((strlen(final) + 1) * sizeof newRomaja->(*final));
-        strncpy(newRomaja->final, final, (strlen(final) + 1) * sizeof newRomaja->(*final));
+        newRomaja->final = malloc((strlen(final) + 1) * sizeof(*(newRomaja->final)));
+        strncpy(newRomaja->final, final, (strlen(final) + 1) * sizeof(*(newRomaja->final)));
     }
 
-    newRomaja->combined = malloc((strlen(combined) + 1) * sizeof newRomaja->(*combined));
-    strncpy(newRomaja->combined, combined, (strlen(combined) + 1) * sizeof newRomaja->(*combined));
+    newRomaja->combined = malloc((strlen(combined) + 1) * sizeof(*(newRomaja->combined)));
+    strncpy(newRomaja->combined, combined, (strlen(combined) + 1) * sizeof(*(newRomaja->combined)));
 
     newRomaja->syllable_type = syllable_type;
 

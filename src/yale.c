@@ -3,6 +3,7 @@
  */
 #include "yale.h"
 #include <string.h>
+#include <assert.h>
 
 static const char initial[][3] = {
     "k", "kk", "n", "t", "tt",
@@ -61,12 +62,14 @@ _hangeul_to_yale(Romaja **yaleRef, const Hangeul *hangeul) {
             strncat(combined, vowel[current->jungseong], strlen(initial[current->jungseong]) + 1);
             strncat(combined, final[current->jongseong], strlen(initial[current->jongseong]) + 1);
 
-            romaja_push(yaleRef, initial[current->choseong], vowel[current->jungseong], final[current->jongseong], combined, current->syllable_type);
+            romaja_push(yaleRef, (char *)initial[current->choseong], (char *)vowel[current->jungseong], (char *)final[current->jongseong], combined, current->syllable_type);
         }
         else {
-            combined = ucs_to_utf8(&(current->combined), sizeof(current->combined));
-            romaja_push(yaleRef, NULL, NULL, NULL, ucs_to_utf8(ucs_combined, current->syllable_type);
+            ucs_to_utf8(combined, &(current->combined), sizeof(current->combined));
+            romaja_push(yaleRef, NULL, NULL, NULL, combined, current->syllable_type);
         }
+
+        memset(combined, 0, sizeof(combined));
 
         current = current->next;
         size++;

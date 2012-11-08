@@ -4,6 +4,7 @@
 /* Standard Library */
 #include <string.h>
 #include <stdio.h>
+#include <assert.h>
 
 /* Local includes */
 #include "hangeul-romaja.h"
@@ -118,11 +119,13 @@ int
 romaja_strlen(const Romaja *romaja)
 {
     int len = 0;
-    Romaja *current = malloc(sizeof *current);
-    *current = *romaja;
+    const Romaja *current = romaja;
 
     while (current != NULL) {
+        printf("%u\n", &current);
+        assert(len < 10);
         if (current->syllable_type == HANGEUL) {
+            puts("is hangeul");
             if (current->initial != NULL) {
                 len += strlen(current->initial);
             }
@@ -132,14 +135,15 @@ romaja_strlen(const Romaja *romaja)
             if (current->final != NULL) {
                 len += strlen(current->final);
             }
+            puts("end of hangeul");
         }
         else {
             len += strlen(current->combined);
         }
+
+        printf("address to next: %x\n", &(romaja->next));
         current = romaja->next;
     }
-
-    free(current);
 
     return len;
 }
