@@ -54,11 +54,11 @@ struct _Romaja {
 void hangeul_push(Hangeul **hangeulRef, int choseong, int jungseong, int jongseong, ucschar combined, SyllableType syllable_type);
 void romaja_push(Romaja **romajaRef, char *initial, char *vowel, char *final, char *combined, SyllableType syllable_type);
 
-int hangeul_len(const Hangeul *hangeul);
-int romaja_len(const Romaja *romaja);
+size_t hangeul_len(const Hangeul *hangeul);
+size_t romaja_len(const Romaja *romaja);
 
-int hangeul_destroy(Hangeul **hangeulRef);
-int romaja_destroy(Romaja **romajaRef);
+void hangeul_destroy(Hangeul **hangeulRef);
+void romaja_destroy(Romaja **romajaRef);
 
 size_t utf8_strlen(const utf8char *str);
 size_t ucs_strlen(const ucschar *str);

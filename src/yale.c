@@ -67,6 +67,7 @@ _hangeul_to_yale(Romaja **yaleRef, const Hangeul *hangeul) {
         else {
             ucs_to_utf8(combined, &(current->combined), sizeof(current->combined));
             romaja_push(yaleRef, NULL, NULL, NULL, combined, current->syllable_type);
+
         }
 
         memset(combined, 0, sizeof(combined));

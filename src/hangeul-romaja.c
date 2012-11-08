@@ -18,16 +18,16 @@
 
 /* Declarations */
 int hangeul_puts(const Hangeul *hangeul);
-int hangeul_snprint(char *dest, const Hangeul *hangeul, size_t size);
-int hangeul_strlen(const Hangeul *hangeul);
+size_t hangeul_snprint(char *dest, const Hangeul *hangeul, size_t size);
+size_t hangeul_strlen(const Hangeul *hangeul);
 int romaja_puts(const Romaja *romaja);
-int romaja_snprint(char *dest, const Romaja *romaja, size_t size);
-int romaja_strlen(const Romaja *romaja);
+size_t romaja_snprint(char *dest, const Romaja *romaja, size_t size);
+size_t romaja_strlen(const Romaja *romaja);
 
-int
-hangeul_to_yale(char *romaja, size_t size, const char *hangeul)
+size_t
+hangeul_to_yale(char *romaja, const char *hangeul, size_t size)
 {
-    int chars_left = 0;
+    size_t chars_left = 0;
     Hangeul *h = NULL;
     Romaja *r = NULL;
 
@@ -46,20 +46,20 @@ hangeul_to_yale(char *romaja, size_t size, const char *hangeul)
     return chars_left;
 }
 
-int
-hangeul_to_yale_original(char *romaja, size_t size, const char *hangeul)
+size_t
+hangeul_to_yale_original(char *romaja, const char *hangeul, size_t size)
 {
 
 }
 
-int
-hangeul_to_mccune_reischauer(char *romaja, size_t size, const char *hangeul)
+size_t
+hangeul_to_mccune_reischauer(char *romaja, const char *hangeul, size_t size)
 {
 
 }
 
-int
-hangeul_to_revised(char *romaja, size_t size, const char *hangeul)
+size_t
+hangeul_to_revised(char *romaja, const char *hangeul, size_t size)
 {
 
 }
@@ -71,10 +71,10 @@ hangeul_puts(const Hangeul* hangeul)
     return success;
 }
 
-int
+size_t
 hangeul_snprint(char *dest, const Hangeul* hangeul, size_t size)
 {
-    int chars_not_printed = 0;
+    size_t chars_not_printed = 0;
     return chars_not_printed;
 }
 
@@ -88,7 +88,7 @@ romaja_puts(const Romaja* romaja)
     return success;
 }
 
-int
+size_t
 romaja_snprint(char *dest, const Romaja* romaja, size_t size)
 {
     if (size == 0) {
@@ -101,10 +101,10 @@ romaja_snprint(char *dest, const Romaja* romaja, size_t size)
     return romaja_strlen(romaja) - strlen(dest);
 }
 
-int
+size_t
 hangeul_strlen(const Hangeul* hangeul)
 {
-    int length = 0;
+    size_t length = 0;
     const Hangeul *current = hangeul;
 
     while (current != NULL) {
@@ -115,17 +115,14 @@ hangeul_strlen(const Hangeul* hangeul)
     return length;
 }
 
-int
+size_t
 romaja_strlen(const Romaja *romaja)
 {
-    int len = 0;
-    const Romaja *current = romaja;
+    size_t len = 0;
+    Romaja *current = (Romaja *)romaja;
 
     while (current != NULL) {
-        printf("%u\n", &current);
-        assert(len < 10);
         if (current->syllable_type == HANGEUL) {
-            puts("is hangeul");
             if (current->initial != NULL) {
                 len += strlen(current->initial);
             }
@@ -135,14 +132,12 @@ romaja_strlen(const Romaja *romaja)
             if (current->final != NULL) {
                 len += strlen(current->final);
             }
-            puts("end of hangeul");
         }
         else {
             len += strlen(current->combined);
         }
 
-        printf("address to next: %x\n", &(romaja->next));
-        current = romaja->next;
+        current = current->next;
     }
 
     return len;

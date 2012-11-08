@@ -51,10 +51,10 @@ romaja_push(Romaja **romajaRef, char *initial, char *vowel, char *final, char *c
     (*romajaRef) = newRomaja;
 }
 
-int
+size_t
 hangeul_len(const Hangeul *hangeul)
 {
-    int len = 0;
+    size_t len = 0;
     const Hangeul *current = hangeul;
 
     while (current != NULL) {
@@ -65,10 +65,10 @@ hangeul_len(const Hangeul *hangeul)
     return len;
 }
 
-int
+size_t
 romaja_len(const Romaja *romaja)
 {
-    int len = 0;
+    size_t len = 0;
     const Romaja *current = romaja;
 
     while (current != NULL) {
@@ -79,7 +79,7 @@ romaja_len(const Romaja *romaja)
     return len;
 }
 
-int
+void
 hangeul_destroy(Hangeul **hangeulRef)
 {
     Hangeul *current = *hangeulRef;
@@ -94,7 +94,7 @@ hangeul_destroy(Hangeul **hangeulRef)
     *hangeulRef = NULL;
 }
 
-int
+void
 romaja_destroy(Romaja **romajaRef)
 {
     Romaja *current = *romajaRef;
