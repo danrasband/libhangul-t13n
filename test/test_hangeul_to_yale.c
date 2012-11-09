@@ -17,6 +17,8 @@ test_main()
     yale_str = NULL;
 
     size = hangeul_to_yale(yale_str, hangeul_str, size);
+    printf("estimated size: %lu\n", size);
+
     yale_str = malloc((size + 1) * sizeof *yale_str);
     hangeul_to_yale(yale_str, hangeul_str, (size + 1) * sizeof *yale_str);
 

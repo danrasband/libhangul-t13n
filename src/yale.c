@@ -58,16 +58,15 @@ _hangeul_to_yale(Romaja **yaleRef, const Hangeul *hangeul) {
             assert(strlen(initial[current->jungseong]) <= 3);
             assert(strlen(initial[current->jongseong]) <= 3);
 
-            strncat(combined, initial[current->choseong], strlen(initial[current->choseong]) + 1);
+            strcpy(combined, initial[current->choseong], strlen(initial[current->choseong]) + 1);
             strncat(combined, vowel[current->jungseong], strlen(initial[current->jungseong]) + 1);
             strncat(combined, final[current->jongseong], strlen(initial[current->jongseong]) + 1);
 
             romaja_push(yaleRef, (char *)initial[current->choseong], (char *)vowel[current->jungseong], (char *)final[current->jongseong], combined, current->syllable_type);
         }
         else {
-            ucs_to_utf8(combined, &(current->combined), sizeof(current->combined));
+            ucs_to_utf8(combined, &(current->combined), sizeof(current->combined) + 1);
             romaja_push(yaleRef, NULL, NULL, NULL, combined, current->syllable_type);
-
         }
 
         memset(combined, 0, sizeof(combined));
