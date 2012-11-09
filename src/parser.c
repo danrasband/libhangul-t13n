@@ -27,8 +27,6 @@ hangeul_parse_str(Hangeul** hangeulRef, size_t size, const char *source)
 
     overflow = utf8_to_ucs(ucs_str, source, strlen(source) * sizeof(ucschar));
 
-    printf("overflow: %d\n", overflow);
-
     while (overflow > 0) {
         ucs_str = realloc(ucs_str, sizeof(ucs_str) + overflow);
         overflow = utf8_to_ucs(ucs_str, source, sizeof(ucs_str));
@@ -45,7 +43,6 @@ hangeul_parse_str(Hangeul** hangeulRef, size_t size, const char *source)
             jongseong = ucs_hangeul_jongseong_index(current);
             combined = current;
             syllable_type = HANGEUL;
-            printf("%d, %d, %d, %x, %d\n", choseong, jungseong, jongseong, combined, syllable_type);
         }
         else {
             choseong = -1;

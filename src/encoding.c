@@ -94,12 +94,11 @@ typedef enum utf8CharType {
 #define UCS_HANGUL_SYLLABLES_MOUM_COUNT     21
 #define UCS_HANGUL_SYLLABLES_PACHIM_COUNT   28
 
-int
+size_t
 utf8_to_ucs(ucschar *dest, const char *orig, size_t size)
 {
-    int i;
-    int len = strlen(orig);
-    int returnValue = 0;
+    size_t returnValue = 0;
+    int i, len = strlen(orig);
     bool is_last = false;
 
     utf8char z, y, x, w, v, u;
@@ -194,13 +193,11 @@ utf8_to_ucs(ucschar *dest, const char *orig, size_t size)
     return returnValue;
 }
 
-int
+size_t
 ucs_to_utf8(char *dest, const ucschar *orig, size_t size)
 {
-    int returnValue = 0;
-    int len = (int)ucs_strlen(orig);
-    int destIndex = 0;
-    int i;
+    size_t returnValue = 0;
+    int i, destIndex = 0, len = (int)ucs_strlen(orig);
     ucschar current;
 
     utf8char utf8_str[len * UTF8_MAX_BYTES];
@@ -247,7 +244,12 @@ ucs_to_utf8(char *dest, const ucschar *orig, size_t size)
         }
     }
 
-    memcpy(dest, utf8_str, size);
+    if (size >= utf8_strlen(utf8_str) * sizeof *utf8_str + 1) {
+        memcpy(dest, utf8_str, utf8_strlen(utf8_str) * sizeof *utf8_str + 1);
+    }
+    else {
+        memcpy(dest, utf8_str, size);
+    }
 
     returnValue = utf8_strlen(utf8_str) - size;
 

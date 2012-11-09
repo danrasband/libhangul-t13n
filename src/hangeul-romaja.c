@@ -39,8 +39,6 @@ hangeul_to_yale(char *romaja, const char *hangeul, size_t size)
 
     /* Copy string to romaja var */
     chars_left = romaja_snprint(romaja, r, size);
-    printf("romaja: %s\n", romaja);
-    printf("chars_left: %lu\n", chars_left);
 
     hangeul_destroy(&h);
     romaja_destroy(&r);
@@ -95,51 +93,30 @@ romaja_snprint(char *dest, const Romaja* romaja, size_t size)
 {
     int i, len = romaja_len(romaja);
     size_t needed_length = 0;
-    char tmp[len][32];
     Romaja *current = (Romaja *)romaja;
 
     if (size == 0) {
         return romaja_strlen(romaja);
     }
-    else {
-        memset(dest, 0, size);
-    }
 
-    /* Prints backwards, by syllable. */
+    /* Must set dest to nulls so that concatenation will work properly. */
+    memset(dest, 0, size);
+
+    /* Prints by syllable. */
     for (i = 0; i < len; i++) {
-        if (current->syllable_type == HANGEUL) {
-            if (strlen(current->initial) > 0) {
-                assert(sizeof(tmp[i]) - strlen(tmp[i]) - 1 >= strlen(current->initial));
-                strncat(tmp[i], current->initial, sizeof(tmp[i]) - strlen(tmp[i]) - 1);
-            }
+        /*printf("%s\n", dest);
+        printf("size: %lu; strlen(dest): %lu; strlen(current->combined): %lu\n", size, strlen(dest), strlen(current->combined));*/
+        assert(size - strlen(dest) > strlen(current->combined));
+        strncat(dest, current->combined, size - strlen(dest) - 1);
 
-            if (strlen(current->vowel) > 0) {
-                assert(sizeof(tmp[i]) - strlen(tmp[i]) - 1 >= strlen(current->vowel));
-                strncat(tmp[i], current->vowel, sizeof(tmp[i]) - strlen(tmp[i]) - 1);
-            }
-
-            if (strlen(current->final) > 0) {
-                assert(sizeof(tmp[i]) - strlen(tmp[i]) - 1 >= strlen(current->final));
-                strncat(tmp[i], current->final, sizeof(tmp[i]) - strlen(tmp[i]) - 1);
-            }
-        }
-        else {
-            assert(sizeof(tmp[i]) - strlen(tmp[i]) - 1 >= strlen(current->combined));
-            strncat(tmp[i], current->combined, sizeof(tmp[i]) - strlen(tmp[i]) - 1);
-        }
-
-        printf("tmp[%d]: %s; strlen(tmp[%d]): %lu\n", i, tmp[i], i, strlen(tmp[i]));
-        needed_length += strlen(tmp[i]);
+        needed_length += strlen(current->combined);
         current = current->next;
     }
 
-    for (i = len - 1; size - strlen(dest) - 1 > strlen(tmp[i]); i--) {
-        printf("i: %d; size: %lu; strlen(dest): %lu; strlen(tmp[i]): %lu\n", i, size, strlen(dest), strlen(tmp[i]));
-        assert(size - strlen(dest) - 1 > strlen(tmp[i]));
-        strncat(dest, tmp[i], size - strlen(dest) - 1);
+    if (needed_length + 1 > size) {
+        return needed_length + 1 - size;
     }
-
-    return needed_length - size;
+    return 0;
 }
 
 size_t
@@ -163,24 +140,7 @@ romaja_strlen(const Romaja *romaja)
     Romaja *current = (Romaja *)romaja;
 
     while (current != NULL) {
-        if (current->syllable_type == HANGEUL) {
-            if (current->initial != NULL) {
-                len += strlen(current->initial);
-                printf("initial: %s\n", current->initial);
-            }
-            if (current->vowel != NULL) {
-                len += strlen(current->vowel);
-                printf("vowel: %s\n", current->vowel);
-            }
-            if (current->final != NULL) {
-                len += strlen(current->final);
-                printf("final: %s\n", current->final);
-            }
-        }
-        else {
-            len += strlen(current->combined);
-            printf("combined: %s\n", current->combined);
-        }
+        len += strlen(current->combined);
 
         current = current->next;
     }

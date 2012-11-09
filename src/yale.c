@@ -47,7 +47,8 @@ int
 _hangeul_to_yale(Romaja **yaleRef, const Hangeul *hangeul) {
     const Hangeul *current = hangeul;
 
-    char combined[12];
+    char combined[32];
+    ucschar tmp_combined[2] = {'\0'};
 
     int size = 0;
 
@@ -58,14 +59,15 @@ _hangeul_to_yale(Romaja **yaleRef, const Hangeul *hangeul) {
             assert(strlen(initial[current->jungseong]) <= 3);
             assert(strlen(initial[current->jongseong]) <= 3);
 
-            strcpy(combined, initial[current->choseong], strlen(initial[current->choseong]) + 1);
-            strncat(combined, vowel[current->jungseong], strlen(initial[current->jungseong]) + 1);
-            strncat(combined, final[current->jongseong], strlen(initial[current->jongseong]) + 1);
+            strncpy(combined, initial[current->choseong], strlen(initial[current->choseong]) + 1);
+            strncat(combined, vowel[current->jungseong], strlen(vowel[current->jungseong]) + 1);
+            strncat(combined, final[current->jongseong], strlen(final[current->jongseong]) + 1);
 
             romaja_push(yaleRef, (char *)initial[current->choseong], (char *)vowel[current->jungseong], (char *)final[current->jongseong], combined, current->syllable_type);
         }
         else {
-            ucs_to_utf8(combined, &(current->combined), sizeof(current->combined) + 1);
+            tmp_combined[0] = current->combined;
+            ucs_to_utf8(combined, tmp_combined, sizeof(combined));
             romaja_push(yaleRef, NULL, NULL, NULL, combined, current->syllable_type);
         }
 
