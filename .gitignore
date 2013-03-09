@@ -1,7 +1,18 @@
-## Ignore the following:
+# http://www.gnu.org/software/automake
 
-# The wiki repo
+Makefile.in
+
+# http://www.gnu.org/software/autoconf
+
+/autom4te.cache
+/aclocal.m4
+/compile
+/configure
+/depcomp
+/install-sh
+/missing
+
+# Wiki
+
 /wiki
 
-# tmp directory
-/tmp
