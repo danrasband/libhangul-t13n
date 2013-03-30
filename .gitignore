@@ -1,9 +1,7 @@
 # http://www.gnu.org/software/automake
-
 Makefile.in
 
 # http://www.gnu.org/software/autoconf
-
 /autom4te.cache
 /aclocal.m4
 /compile
@@ -11,6 +9,15 @@ Makefile.in
 /depcomp
 /install-sh
 /missing
+/m4
+/libtool
+/ltmain.sh
+/stamp-h1
+/autoscan.log
+.deps
+.libs
+/config.*
+Makefile
 
 # Wiki
 
@@ -19,4 +26,11 @@ Makefile.in
 # Temp folder
 
 /tmp
+
+# Object files
+*.o
+*.la
+*.lo
+*.so
+
 
