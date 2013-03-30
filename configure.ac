@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_PREREQ([2.69])
+AC_PREREQ([2.61])
 AC_INIT([libhangeul-romaja], [0.0.0], [danrasband@gmail.com])
 
 # Libtool
