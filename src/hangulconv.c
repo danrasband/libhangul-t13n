@@ -35,7 +35,7 @@ main (int argc, char * argv[])
     char *input_filename = NULL;
 
     // Set default romanization system.
-    ROMANIZATION_SYSTEM t = YALE;
+    T13N_SYSTEM t = YALE;
 
     // Localization setup.
     setlocale (LC_ALL, "");

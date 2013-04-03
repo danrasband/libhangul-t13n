@@ -1,14 +1,14 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Hangul Transliteration Library.
+# Copyright (C) 2013.
+# This file is distributed under the same license as the libhangul-t13n package.
+# Daniel Rasband <danrasband@gmail.com>, 2013.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-01 21:23-0600\n"
+"POT-Creation-Date: 2013-04-03 07:46-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,21 +17,32 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/hangeulconv.c:82
+#: ../src/hangulconv.c:82
 #, c-format
 msgid "Try `%s --help`' for more information.\n"
 msgstr ""
 
-#: src/hangeulconv.c:85
+#: ../src/hangulconv.c:85
 #, c-format
-msgid "Usage: %s [OPTION]... [FILE]...\n"
+msgid "Usage: %s [OPTION]... [INPUT]...\n"
 msgstr ""
 
-#: src/hangeulconv.c:86
-msgid "Convert hangeul to romaja characters or romaja to hangeul.\n"
+#: ../src/hangulconv.c:86
+msgid ""
+"Transliterate Hangul text.\n"
+"\n"
 msgstr ""
 
-#: src/hangeulconv.c:88
+#: ../src/hangulconv.c:87
+msgid ""
+"Mandatory arguments to long options are mandatory for short options, too.\n"
+msgstr ""
+
+#: ../src/hangulconv.c:88
+msgid "Convert hangul to romaja characters or romaja to hangul.\n"
+msgstr ""
+
+#: ../src/hangulconv.c:90
 msgid ""
 "  -t, --transliteration-system=SYSTEM   use transliteration system SYSTEM:\n"
 "                                          yale (y), revised-romanization "
@@ -40,20 +51,20 @@ msgid ""
 "                                          (k), skats (s)\n"
 msgstr ""
 
-#: src/hangeulconv.c:94
+#: ../src/hangulconv.c:96
 msgid "  -o, --output=FILE                     print output to FILE\n"
 msgstr ""
 
-#: src/hangeulconv.c:97
+#: ../src/hangulconv.c:99
 msgid "  -i, --input=FILE                      get input from FILE\n"
 msgstr ""
 
-#: src/hangeulconv.c:100
+#: ../src/hangulconv.c:102
 msgid ""
 "  -v, --version                         print version information and quit\n"
 msgstr ""
 
-#: src/hangeulconv.c:103
+#: ../src/hangulconv.c:105
 msgid ""
 "  -h, --help                            print this help message and quit\n"
 msgstr ""

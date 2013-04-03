@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.61])
-AC_INIT([libhtr], [0.0.0], [danrasband@gmail.com])
+AC_INIT([libhangul-t13n], [0.0.0], [danrasband@gmail.com])
 
 # Libtool
 AC_CONFIG_MACRO_DIR([m4])
