@@ -1,0 +1,22 @@
+
+src/hangeulconv.c,181
+static char* program_name;14,312
+static struct option const long_options[long_options16,340
+static char *optstring optstring26,674
+main 29,717
+version 81,1788
+usage 87,1843
+
+src/yale.c,0
+
+src/skats.c,0
+
+src/romaja.c,0
+
+src/revised-romanization.c,0
+
+src/mccune-reischauer.c,0
+
+src/libhangeul-romaja.c,0
+
+src/hangeul.c,0

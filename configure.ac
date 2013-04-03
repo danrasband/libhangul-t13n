@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.61])
-AC_INIT([libhangeul-romaja], [0.0.0], [danrasband@gmail.com])
+AC_INIT([libhtr], [0.0.0], [danrasband@gmail.com])
 
 # Libtool
 AC_CONFIG_MACRO_DIR([m4])
@@ -8,6 +8,10 @@ LT_INIT
 
 # Automake
 AM_INIT_AUTOMAKE([1.11 no-define])
+
+# Gettext
+AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.18.1])
 
 # Source dir's unique file
 AC_CONFIG_SRCDIR([src/hangeulconv.c])
@@ -30,6 +34,6 @@ AC_CHECK_HEADERS([getopt.h])
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile po/Makefile.in])
 AC_OUTPUT([src/Makefile])
 AC_OUTPUT

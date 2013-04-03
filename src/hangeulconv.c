@@ -7,91 +7,104 @@
  */
 
 #include "hangeulconv.h"
+#include "common.h"
 
 void version();
 void usage(int status);
 
-typedef enum {
-  YALE,
-  REVISED_ROMANIZATION,
-  MCCUNE_REISCHAUER
-} ROMANIZATION;
-
+static char* program_name;
 
 static struct option const long_options[] =
 {
-  {"yale", no_argument, NULL, 'y'},
-  {"revised", no_argument, NULL, 'r'},
-  {"mccune-reischauer", no_argument, NULL, 'm'},
-  {"output", required_argument, NULL, 'o'},
-  {"input", required_argument, NULL, 'i'},
-  {"version", no_argument, NULL, 'v'},
-  {"help", no_argument, NULL, 'h'}
+    {"transliteration-system", required_argument, NULL, 't'},
+    {"output", required_argument, NULL, 'o'},
+    {"input", required_argument, NULL, 'i'},
+    {"version", no_argument, NULL, 'v'},
+    {"help", no_argument, NULL, 'h'}
 };
 static char *optstring = "yrmo:i:hv";
 
 int
 main (int argc, char * argv[])
 {
-  // Must use int because char has different implementations on
-  // different systems and EOF may not trigger properly.
-  int c; 
-  int oi = -1;
-  char *output_filename = NULL;
-  char *input_filename = NULL;
+    // Must use int because char has different implementations on
+    // different systems and EOF may not trigger properly.
+    int c;
+    int oi = -1;
+    char *output_filename = NULL;
+    char *input_filename = NULL;
 
-  // Set default romanization system.
-  ROMANIZATION t = YALE;
+    // Set default romanization system.
+    ROMANIZATION_SYSTEM t = YALE;
 
-  // Set the program name.
-  set_program_name(argv[0]);
+    // Localization setup.
+    setlocale (LC_ALL, "");
+    bindtextdomain (PACKAGE, LOCALEDIR);
+    textdomain (PACKAGE);
 
-  // Go through options.
-  while ((c = getopt_long(argc, argv, optstring, long_options, &oi)) != EOF) {
+    // Set the program name.
+    program_name = argv[0];
 
-    switch (c) {
-      case 'y':
-        t = YALE;
-        break;
-      case 'r':
-        t = REVISED_ROMANIZATION;
-        break;
-      case 'm':
-        t = MCCUNE_REISCHAUER;
-        break;
-      case 'o':
-        output_filename = optarg;
-        break;
-      case 'i':
-        input_filename = optarg;
-        break;
-      case 'v':
-        version();
-      case 'h':
-        usage(EXIT_SUCCESS);
-      default:
-        usage(HANGEULCONV_FAILURE);
+    // Go through options.
+    while ((c = getopt_long(argc, argv, optstring, long_options, &oi)) != EOF) {
+
+        switch (c) {
+        case 't':
+
+            break;
+        case 'o':
+            output_filename = optarg;
+            break;
+        case 'i':
+            input_filename = optarg;
+            break;
+        case 'v':
+            version();
+        case 'h':
+            usage(EXIT_SUCCESS);
+        default:
+            usage(HANGEULCONV_FAILURE);
+        }
     }
-  }
 
-  return 0;
+    return 0;
 }
 
 void
 version () {
-  printf("Version\n");
-  exit(0);
+    printf("Version\n");
+    exit(0);
 }
 
 void
 usage (int status) {
-  if (status != EXIT_SUCCESS) {
-    fprintf(stderr, _("Try `%s --help`' for more information.\n"), program_name);
-  }
-  else {
-    printf(_("Usage: %s [OPTION]... [FILE]...\n"), program_name);
-    fputs(_("\
-      Convert hangeul to romaja characters or romaja to hangeul.\n"), stdout);
-  }
+    if (status != EXIT_SUCCESS) {
+        fprintf (stderr, _("Try `%s --help`' for more information.\n"), program_name);
+    }
+    else {
+        printf (_("Usage: %s [OPTION]... [INPUT]...\n"), program_name);
+        fputs (_("Transliterate Hangeul text.\n\n"), stdout);
+        fputs (_("Mandatory arguments to long options are mandatory for short options, too.\n"), stdout);
+        fputs (_("\
+Convert hangeul to romaja characters or romaja to hangeul.\n"), stdout);
+        fputs (_("\
+  -t, --transliteration-system=SYSTEM   use transliteration system SYSTEM:\n\
+                                          yale (y), revised-romanization (r),\n\
+                                          mccune-reischauer (m), kontsevich\n\
+                                          (k), skats (s)\n\
+"), stdout);
+        fputs (_("\
+  -o, --output=FILE                     print output to FILE\n\
+"), stdout);
+        fputs (_("\
+  -i, --input=FILE                      get input from FILE\n\
+"), stdout);
+        fputs (_("\
+  -v, --version                         print version information and quit\n\
+"), stdout);
+        fputs (_("\
+  -h, --help                            print this help message and quit\n\
+"), stdout);
+        exit (status);
+    }
 }
-
