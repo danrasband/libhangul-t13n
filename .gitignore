@@ -30,7 +30,7 @@ Makefile
 *.la
 *.lo
 *.so
-hangeulconv
+hangulconv
 
 # Miscellaneous files
 /ABOUT-NLS

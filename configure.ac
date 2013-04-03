@@ -14,7 +14,7 @@ AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.1])
 
 # Source dir's unique file
-AC_CONFIG_SRCDIR([src/hangeulconv.c])
+AC_CONFIG_SRCDIR([src/hangulconv.c])
 
 # Config header
 AC_CONFIG_HEADERS([config.h])

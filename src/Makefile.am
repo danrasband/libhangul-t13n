@@ -1,7 +1,7 @@
 PACKAGE = @PACKAGE@
 DEFS = -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(package)\"
 
-# libhangeulromaja library
+# libhtr library
 lib_LTLIBRARIES = libhtr.la
 libhtr_la_SOURCES = libhtr.c hangul.c romaja.c \
   mccune-reischauer.c revised-romanization.c skats.c yale.c
