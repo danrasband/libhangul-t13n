@@ -1,0 +1,66 @@
+# English translations for libhtr package.
+# Copyright (C) 2013 THE libhtr'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the libhtr package.
+# Dan Rasband <danrasband@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libhtr 0.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-04-01 21:23-0600\n"
+"PO-Revision-Date: 2013-04-03 01:00-0600\n"
+"Last-Translator: Dan Rasband <danrasband@gmail.com>\n"
+"Language-Team: English\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/hangeulconv.c:82
+#, c-format
+msgid "Try `%s --help`' for more information.\n"
+msgstr "Try `%s --help`' for more information.\n"
+
+#: src/hangeulconv.c:85
+#, c-format
+msgid "Usage: %s [OPTION]... [FILE]...\n"
+msgstr "Usage: %s [OPTION]... [FILE]...\n"
+
+#: src/hangeulconv.c:86
+msgid "Convert hangeul to romaja characters or romaja to hangeul.\n"
+msgstr "Convert hangeul to romaja characters or romaja to hangeul.\n"
+
+#: src/hangeulconv.c:88
+msgid ""
+"  -t, --transliteration-system=SYSTEM   use transliteration system SYSTEM:\n"
+"                                          yale (y), revised-romanization "
+"(r),\n"
+"                                          mccune-reischauer (m), kontsevich\n"
+"                                          (k), skats (s)\n"
+msgstr ""
+"  -t, --transliteration-system=SYSTEM   use transliteration system SYSTEM:\n"
+"                                          yale (y), revised-romanization "
+"(r),\n"
+"                                          mccune-reischauer (m), kontsevich\n"
+"                                          (k), skats (s)\n"
+
+#: src/hangeulconv.c:94
+msgid "  -o, --output=FILE                     print output to FILE\n"
+msgstr "  -o, --output=FILE                     print output to FILE\n"
+
+#: src/hangeulconv.c:97
+msgid "  -i, --input=FILE                      get input from FILE\n"
+msgstr "  -i, --input=FILE                      get input from FILE\n"
+
+#: src/hangeulconv.c:100
+msgid ""
+"  -v, --version                         print version information and quit\n"
+msgstr ""
+"  -v, --version                         print version information and quit\n"
+
+#: src/hangeulconv.c:103
+msgid ""
+"  -h, --help                            print this help message and quit\n"
+msgstr ""
+"  -h, --help                            print this help message and quit\n"

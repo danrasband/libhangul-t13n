@@ -1,0 +1,59 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-04-01 21:23-0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/hangeulconv.c:82
+#, c-format
+msgid "Try `%s --help`' for more information.\n"
+msgstr ""
+
+#: src/hangeulconv.c:85
+#, c-format
+msgid "Usage: %s [OPTION]... [FILE]...\n"
+msgstr ""
+
+#: src/hangeulconv.c:86
+msgid "Convert hangeul to romaja characters or romaja to hangeul.\n"
+msgstr ""
+
+#: src/hangeulconv.c:88
+msgid ""
+"  -t, --transliteration-system=SYSTEM   use transliteration system SYSTEM:\n"
+"                                          yale (y), revised-romanization "
+"(r),\n"
+"                                          mccune-reischauer (m), kontsevich\n"
+"                                          (k), skats (s)\n"
+msgstr ""
+
+#: src/hangeulconv.c:94
+msgid "  -o, --output=FILE                     print output to FILE\n"
+msgstr ""
+
+#: src/hangeulconv.c:97
+msgid "  -i, --input=FILE                      get input from FILE\n"
+msgstr ""
+
+#: src/hangeulconv.c:100
+msgid ""
+"  -v, --version                         print version information and quit\n"
+msgstr ""
+
+#: src/hangeulconv.c:103
+msgid ""
+"  -h, --help                            print this help message and quit\n"
+msgstr ""
