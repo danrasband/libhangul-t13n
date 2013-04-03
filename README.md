@@ -1,6 +1,6 @@
-libhangeul-romaja
-=================
-A C library for converting between hangeul and roman characters.
+libhangul-t13n
+==============
+A C library for transliterating Hangul and hangulizing Romaja.
 
 TODO
 ----
