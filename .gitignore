@@ -20,11 +20,9 @@ Makefile.in
 Makefile
 
 # Wiki
-
 /wiki
 
 # Temp folder
-
 /tmp
 
 # Object files
@@ -32,5 +30,8 @@ Makefile
 *.la
 *.lo
 *.so
+hangeulconv
 
+# Miscellaneous files
+/ABOUT-NLS
 
