@@ -72,7 +72,7 @@ main (int argc, char * argv[])
 
 void
 version () {
-    printf("Version\n");
+    printf("Version: %s\n", PACKAGE_VERSION);
     exit(0);
 }
 
