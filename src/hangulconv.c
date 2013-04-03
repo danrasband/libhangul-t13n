@@ -1,12 +1,12 @@
 /**
- * File: hangeulconv.c
+ * File: hangulconv.c
  * Author: Daniel Rasband <danrasband@gmail.com>
- * Description: This is the command-line tool part of the libhangeul-romaja
- *   package. It allows you to use the command line to convert hangeul and
+ * Description: This is the command-line tool part of the libhtr
+ *   package. It allows you to use the command line to convert hangul and
  *   romaja.
  */
 
-#include "hangeulconv.h"
+#include "hangulconv.h"
 #include "common.h"
 
 void version();
@@ -63,7 +63,7 @@ main (int argc, char * argv[])
         case 'h':
             usage(EXIT_SUCCESS);
         default:
-            usage(HANGEULCONV_FAILURE);
+            usage(HANGULCONV_FAILURE);
         }
     }
 
@@ -83,10 +83,10 @@ usage (int status) {
     }
     else {
         printf (_("Usage: %s [OPTION]... [INPUT]...\n"), program_name);
-        fputs (_("Transliterate Hangeul text.\n\n"), stdout);
+        fputs (_("Transliterate Hangul text.\n\n"), stdout);
         fputs (_("Mandatory arguments to long options are mandatory for short options, too.\n"), stdout);
         fputs (_("\
-Convert hangeul to romaja characters or romaja to hangeul.\n"), stdout);
+Convert hangul to romaja characters or romaja to hangul.\n"), stdout);
         fputs (_("\
   -t, --transliteration-system=SYSTEM   use transliteration system SYSTEM:\n\
                                           yale (y), revised-romanization (r),\n\

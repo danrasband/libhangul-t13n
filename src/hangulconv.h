@@ -1,8 +1,8 @@
 /**
- * Header file for hangeulconv.c.
+ * Header file for hangulconv.c.
  */
 
-#ifndef __HANGEULCONV_H__
+#ifndef __HANGULCONV_H__
 
 #include "common.h"
 
@@ -10,8 +10,8 @@
 #define EXIT_SUCCESS 0
 #endif
 
-#ifndef HANGEULCONV_FAILURE
-#define HANGEULCONV_FAILURE 2
+#ifndef HANGULCONV_FAILURE
+#define HANGULCONV_FAILURE 2
 #endif
 
 #include <stdio.h>
@@ -19,7 +19,7 @@
 #include <getopt.h>
 
 /* Local includes */
-#include "libhangeul-romaja.h"
+#include "libhtr.h"
 
 #endif
 
