@@ -7,7 +7,7 @@ AC_CONFIG_MACRO_DIR([m4])
 LT_INIT
 
 # Automake
-AM_INIT_AUTOMAKE([1.11 no-define])
+AM_INIT_AUTOMAKE([1.10 no-define])
 
 # Gettext
 AM_GNU_GETTEXT([external])
