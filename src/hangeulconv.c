@@ -105,6 +105,6 @@ Convert hangeul to romaja characters or romaja to hangeul.\n"), stdout);
         fputs (_("\
   -h, --help                            print this help message and quit\n\
 "), stdout);
-        exit (status);
     }
+    exit (status);
 }
