@@ -28,6 +28,8 @@ AC_PROG_CC_C99
 # Checks for header files.
 AC_CHECK_HEADERS([stdio.h])
 AC_CHECK_HEADERS([stdlib.h])
+AC_CHECK_HEADERS([stdbool.h])
+AC_CHECK_HEADERS([string.h])
 AC_CHECK_HEADERS([libintl.h])
 AC_CHECK_HEADERS([getopt.h])
 

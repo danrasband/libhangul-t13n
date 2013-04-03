@@ -9,20 +9,23 @@
 #include "hangulconv.h"
 #include "common.h"
 
+bool set_t13n_system(char* system);
 void version();
 void usage(int status);
 
 static char* program_name;
 
-static struct option const long_options[] =
-{
+static struct option const long_options[] = {
     {"transliteration-system", required_argument, NULL, 't'},
     {"output", required_argument, NULL, 'o'},
     {"input", required_argument, NULL, 'i'},
     {"version", no_argument, NULL, 'v'},
     {"help", no_argument, NULL, 'h'}
 };
-static char *optstring = "yrmo:i:hv";
+static char *optstring = "t:o:i:hv";
+
+// Set default romanization system.
+static T13N_SYSTEM t13n_system;
 
 int
 main (int argc, char * argv[])
@@ -33,9 +36,6 @@ main (int argc, char * argv[])
     int oi = -1;
     char *output_filename = NULL;
     char *input_filename = NULL;
-
-    // Set default romanization system.
-    T13N_SYSTEM t = YALE;
 
     // Localization setup.
     setlocale (LC_ALL, "");
@@ -50,7 +50,9 @@ main (int argc, char * argv[])
 
         switch (c) {
         case 't':
-
+            if (!set_t13n_system (optarg)) {
+                usage(HANGULCONV_FAILURE);
+            }
             break;
         case 'o':
             output_filename = optarg;
@@ -70,18 +72,26 @@ main (int argc, char * argv[])
     return 0;
 }
 
+bool
+set_t13n_system(char* system)
+{
+    t13n_system = YALE;
+		return true;
+}
+
 void
-version () {
+version ()
+{
     printf("Version: %s\n", PACKAGE_VERSION);
     exit(0);
 }
 
 void
-usage (int status) {
+usage (int status)
+{
     if (status != EXIT_SUCCESS) {
         fprintf (stderr, _("Try `%s --help`' for more information.\n"), program_name);
-    }
-    else {
+    } else {
         printf (_("Usage: %s [OPTION]... [INPUT]...\n"), program_name);
         fputs (_("Transliterate Hangul text.\n\n"), stdout);
         fputs (_("Mandatory arguments to long options are mandatory for short options, too.\n"), stdout);

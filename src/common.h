@@ -4,11 +4,9 @@
 
 #include "../config.h"
 
-#if HAVE_LIBINTL_H
 #include <libintl.h>
 #define _(msg) gettext(msg)
-#else
-#define _(msg) msg
-#endif
+
+#include <stdbool.h>
 
 #endif
