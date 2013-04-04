@@ -32,8 +32,8 @@ static struct option const long_options[] = {
 };
 static char *optstring = "t:o:i:zhv";
 
-// Set default romanization system.
-static T13N_SYSTEM t13n_system;
+// Set default romanization system. Default to Yale.
+static T13N_SYSTEM t13n_system = YALE;
 
 static FILE *input;
 static FILE *output;
