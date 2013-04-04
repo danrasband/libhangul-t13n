@@ -16,6 +16,7 @@
 
 #include <stdio.h>
 #include <getopt.h>
+#include <iconv.h>
 
 /* Local includes */
 #include "libhangul-t13n.h"

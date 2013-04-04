@@ -10,8 +10,12 @@ LT_INIT
 AM_INIT_AUTOMAKE([1.10 no-define])
 
 # Gettext
+GETTEXT_PACKAGE="$PACKAGE"
+AC_SUBST([GETTEXT_PACKAGE])
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"], [gettext package name])
 AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION([0.18.1])
+AM_GNU_GETTEXT_VERSION([0.18])
+AM_ICONV
 
 # Source dir's unique file
 AC_CONFIG_SRCDIR([src/hangulconv.c])
@@ -23,6 +27,8 @@ AC_CONFIG_HEADERS([config.h])
 AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PROG_CC_C99
+AC_PROG_LIBTOOL
+AC_PROG_INSTALL
 
 # Checks for libraries.
 
@@ -37,6 +43,9 @@ AC_CHECK_HEADERS([getopt.h])
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
-AC_CONFIG_FILES([Makefile po/Makefile.in])
-AC_OUTPUT([src/Makefile])
+AC_CONFIG_FILES([
+Makefile
+src/Makefile
+po/Makefile.in
+])
 AC_OUTPUT

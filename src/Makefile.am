@@ -10,4 +10,4 @@ include_HEADERS = libhangul-t13n.h
 # Command-line tool
 bin_PROGRAMS = hangulconv
 hangulconv_SOURCES = hangulconv.c
-hangulconv_LDADD = libhangul-t13n.la $(LTLIBINTL)
+hangulconv_LDADD = libhangul-t13n.la $(LTLIBINTL) $(LTLIBICONV)
