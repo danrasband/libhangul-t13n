@@ -80,32 +80,31 @@ main (int argc, char * argv[])
 bool
 set_t13n_system(char* system)
 {
-    struct t13n_system_data {
-        char* name;
-        T13N_SYSTEM system;
-        size_t name_length;
-    };
-
-    struct t13n_system_data t13n_systems[] = {
-        {"yale", YALE, strlen("yale")},
-        {"y", YALE, 1},
-        {"revised-romanization", REVISED_ROMANIZATION, strlen("revised-romanization")},
-        {"revised", REVISED_ROMANIZATION, strlen("revised")},
-        {"r", REVISED_ROMANIZATION, strlen("r")},
-        {"mccune-reischauer", MCCUNE_REISCHAUER, strlen("mccune-reischauer")},
-        {"mccune", MCCUNE_REISCHAUER, strlen("mccune")},
-        {"m", MCCUNE_REISCHAUER, strlen("m")},
-        {"kontsevich", KONTSEVICH, strlen("kontsevich")},
-        {"k", KONTSEVICH, strlen("k")},
-        {"skats", SKATS, strlen("skats")},
-        {"s", SKATS, strlen("s")}
-    };
-
     int i;
     bool system_set_success = false;
 
+    struct t13n_system_data {
+        char* name;
+        T13N_SYSTEM system;
+    };
+
+    struct t13n_system_data t13n_systems[] = {
+        {"yale", YALE},
+        {"y", YALE},
+        {"revised-romanization", REVISED_ROMANIZATION},
+        {"revised", REVISED_ROMANIZATION},
+        {"r", REVISED_ROMANIZATION},
+        {"mccune-reischauer", MCCUNE_REISCHAUER},
+        {"mccune", MCCUNE_REISCHAUER},
+        {"m", MCCUNE_REISCHAUER},
+        {"kontsevich", KONTSEVICH},
+        {"k", KONTSEVICH},
+        {"skats", SKATS},
+        {"s", SKATS}
+    };
+
     for (i = 0; i < NARRAY(t13n_systems); i++) {
-        if (0 == strncmp(t13n_systems[i].name, system, t13n_systems[i].name_length)) {
+        if (0 == strncmp(t13n_systems[i].name, system, strlen(t13n_systems[i].name))) {
             t13n_system = t13n_systems[i].system;
             system_set_success = true;
             break;
