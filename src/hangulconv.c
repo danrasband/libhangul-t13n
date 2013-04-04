@@ -136,7 +136,7 @@ hangulconv() {
         output_string = xrealloc(output_string, needed_buffer);
     }
 
-    fprintf (output, output_string);
+    fputs(output_string, output);
 }
 
 bool
