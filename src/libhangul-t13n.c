@@ -25,5 +25,10 @@ hangulize_romaja(char* dest, size_t buffer_size, char* orig, T13N_SYSTEM system)
 
     buffer_needed = strlen(orig);
 
+    strncpy(dest, orig, buffer_size);
+
+    if (buffer_size > 0)
+        dest[buffer_size - 1] = '\0';
+
     return buffer_needed;
 }
