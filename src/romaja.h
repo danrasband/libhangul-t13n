@@ -1,4 +1,7 @@
-
+/**
+ * The romaja_node is a doubly-linked list used for traversing back and forth
+ * along a string or a word.
+ */
 typedef struct _romaja_node romaja_node;
 
 struct _romaja_node {
