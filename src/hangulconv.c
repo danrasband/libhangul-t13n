@@ -134,6 +134,7 @@ hangulconv() {
 
     if (needed_buffer >= initial_buffer) {
         output_string = xrealloc(output_string, needed_buffer);
+        transliterate_hangul (output_string, initial_buffer, input_string, t13n_system);
     }
 
     fputs(output_string, output);
