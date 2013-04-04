@@ -8,7 +8,12 @@
 
 #include "hangulconv.h"
 #include "common.h"
+#include <errno.h>
 
+#define STR_REALLOC_FACTOR 1.5
+
+void get_input_string();
+void hangulconv();
 bool set_t13n_system(char* system);
 
 void version();
@@ -16,8 +21,7 @@ void usage(int status);
 
 static char* program_name;
 
-static bool hangulize_flag = 0;
-
+static int hangulize_flag = 0;
 static struct option const long_options[] = {
     {"transliteration-system", required_argument, NULL, 't'},
     {"hangulize", no_argument, &hangulize_flag, 1},
@@ -30,6 +34,10 @@ static char *optstring = "t:o:i:zhv";
 
 // Set default romanization system.
 static T13N_SYSTEM t13n_system;
+
+static FILE *input;
+static FILE *output;
+static char *input_string;
 
 int
 main (int argc, char * argv[])
@@ -58,9 +66,17 @@ main (int argc, char * argv[])
             break;
         case 'o':
             output_filename = optarg;
+            if (!(output = fopen(output_filename, "w"))) {
+                perror(output_filename);
+                exit(1);
+            }
             break;
         case 'i':
             input_filename = optarg;
+            if (!(input = fopen(input_filename, "r"))) {
+                perror(input_filename);
+                exit(1);
+            }
             break;
         case 'z':
             hangulize_flag = 1;
@@ -74,7 +90,53 @@ main (int argc, char * argv[])
         }
     }
 
+    /* Make sure there is an input and output. */
+    if (!output)
+        output = stdout;
+    if (!input)
+        input = stdin;
+
+    get_input_string ();
+    hangulconv ();
+
+    free (input_string);
+    fclose (output);
+    fclose (input);
     return 0;
+}
+
+void
+get_input_string() {
+    int c, i = 0;
+    unsigned int min_buffer_size = 128;
+    unsigned int current_buffer_size = min_buffer_size;
+
+    input_string = xmalloc(min_buffer_size);
+    memset (input_string, 0, min_buffer_size);
+
+    while ((c = getchar()) != EOF) {
+        input_string[i++] = (char)c;
+        if (i == current_buffer_size) {
+            current_buffer_size = current_buffer_size * STR_REALLOC_FACTOR;
+            input_string = xrealloc (input_string, current_buffer_size);
+        }
+    }
+
+    input_string[i] = '\0';
+}
+
+void
+hangulconv() {
+    int initial_buffer = strlen (input_string) * 2;
+    int needed_buffer = 0;
+    char *output_string = xmalloc (initial_buffer);
+    needed_buffer = transliterate_hangul (output_string, initial_buffer, input_string, t13n_system);
+
+    if (needed_buffer >= initial_buffer) {
+        output_string = xrealloc(output_string, needed_buffer);
+    }
+
+    fprintf (output, output_string);
 }
 
 bool

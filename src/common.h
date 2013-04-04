@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 /* I18n */
 #include <libintl.h>
@@ -14,5 +15,7 @@
 
 /* Size of array */
 #define NARRAY(ary) sizeof(ary)/sizeof(ary[0])
+
+#include "xmalloc.h"
 
 #endif
