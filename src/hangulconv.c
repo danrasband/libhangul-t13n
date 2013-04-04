@@ -114,7 +114,7 @@ get_input_string() {
     input_string = xmalloc(min_buffer_size);
     memset (input_string, 0, min_buffer_size);
 
-    while ((c = getchar()) != EOF) {
+    while ((c = fgetc(input)) != EOF) {
         input_string[i++] = (char)c;
         if (i == current_buffer_size) {
             current_buffer_size = current_buffer_size * STR_REALLOC_FACTOR;
@@ -123,6 +123,7 @@ get_input_string() {
     }
 
     input_string[i] = '\0';
+    input_string = xrealloc (input_string, i);
 }
 
 void
@@ -130,11 +131,19 @@ hangulconv() {
     int initial_buffer = strlen (input_string) * 2;
     int needed_buffer = 0;
     char *output_string = xmalloc (initial_buffer);
-    needed_buffer = transliterate_hangul (output_string, initial_buffer, input_string, t13n_system);
+
+    int (*t13n_fn) (char*, size_t, char*, T13N_SYSTEM);
+
+    if (hangulize_flag)
+        t13n_fn = hangulize_romaja;
+    else
+        t13n_fn = transliterate_hangul;
+
+    needed_buffer = t13n_fn (output_string, initial_buffer, input_string, t13n_system);
 
     if (needed_buffer >= initial_buffer) {
         output_string = xrealloc(output_string, needed_buffer);
-        transliterate_hangul (output_string, initial_buffer, input_string, t13n_system);
+        t13n_fn (output_string, initial_buffer, input_string, t13n_system);
     }
 
     fputs(output_string, output);
