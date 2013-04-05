@@ -6,7 +6,7 @@
 #include "libhangul-t13n.h"
 
 int
-transliterate_hangul(char* dest, size_t buffer_size, char* orig, T13N_SYSTEM system) {
+hangul_t13n_transliterate(char* dest, size_t buffer_size, char* orig, T13N_SYSTEM system) {
     int buffer_needed = 0;
 
     buffer_needed = strlen(orig);
@@ -20,7 +20,7 @@ transliterate_hangul(char* dest, size_t buffer_size, char* orig, T13N_SYSTEM sys
 }
 
 int
-hangulize_romaja(char* dest, size_t buffer_size, char* orig, T13N_SYSTEM system) {
+hangul_t13n_hangulize(char* dest, size_t buffer_size, char* orig, T13N_SYSTEM system) {
     int buffer_needed = 0;
 
     buffer_needed = strlen(orig);

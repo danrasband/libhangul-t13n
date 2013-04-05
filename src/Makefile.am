@@ -9,5 +9,7 @@ include_HEADERS = libhangul-t13n.h
 
 # Command-line tool
 bin_PROGRAMS = hangulconv
-hangulconv_SOURCES = hangulconv.c
+hangulconv_SOURCES = hangulconv.c encoding.c
+# Uncomment when using valgrind.
+# hangulconv_LDFLAGS = -no-install
 hangulconv_LDADD = libhangul-t13n.la $(LTLIBINTL) $(LTLIBICONV)

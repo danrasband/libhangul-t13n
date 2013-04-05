@@ -16,7 +16,7 @@ typedef enum {
   SKATS
 } T13N_SYSTEM;
 
-int transliterate_hangul(char* dest, size_t buffer_size, char* orig, T13N_SYSTEM system);
-int hangulize_romaja(char* dest, size_t buffer_size, char* orig, T13N_SYSTEM system);
+int hangul_t13n_transliterate(char* dest, size_t buffer_size, char* orig, T13N_SYSTEM system);
+int hangul_t13n_hangulize(char* dest, size_t buffer_size, char* orig, T13N_SYSTEM system);
 
 #endif

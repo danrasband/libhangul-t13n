@@ -7,14 +7,13 @@
  */
 
 #include "hangulconv.h"
-#include "common.h"
-#include <errno.h>
 
 #define STR_REALLOC_FACTOR 1.5
 
 void get_input_string();
 void hangulconv();
-bool set_t13n_system(char* system);
+
+bool set_t13n_system(char *system);
 
 void version();
 void usage(int status);
@@ -26,7 +25,9 @@ static struct option const long_options[] = {
     {"transliteration-system", required_argument, NULL, 't'},
     {"hangulize", no_argument, &hangulize_flag, 1},
     {"output", required_argument, NULL, 'o'},
+    {"output-encoding", required_argument, NULL, 'o' + 'e'}, // 0xd4
     {"input", required_argument, NULL, 'i'},
+    {"input-encoding", required_argument, NULL, 'i' + 'e'}, // 0xce
     {"version", no_argument, NULL, 'v'},
     {"help", no_argument, NULL, 'h'}
 };
@@ -35,9 +36,16 @@ static char *optstring = "t:o:i:zhv";
 // Set default romanization system. Default to Yale.
 static T13N_SYSTEM t13n_system = YALE;
 
-static FILE *input;
-static FILE *output;
-static char *input_string;
+// I/O Files
+static FILE *input_file;
+static FILE *output_file;
+
+// Encodings
+static char* input_encoding = "UTF8";
+static char* output_encoding = "UTF8";
+
+// Input string.
+static char *input_string = NULL;
 
 int
 main (int argc, char * argv[])
@@ -66,17 +74,23 @@ main (int argc, char * argv[])
             break;
         case 'o':
             output_filename = optarg;
-            if (!(output = fopen(output_filename, "w"))) {
+            if (!(output_file = fopen(output_filename, "w"))) {
                 perror(output_filename);
                 exit(1);
             }
             break;
+        case 0xd4:
+            output_encoding = optarg;
+            break;
         case 'i':
             input_filename = optarg;
-            if (!(input = fopen(input_filename, "r"))) {
+            if (!(input_file = fopen(input_filename, "r"))) {
                 perror(input_filename);
                 exit(1);
             }
+            break;
+        case 0xce:
+            input_encoding = optarg;
             break;
         case 'z':
             hangulize_flag = 1;
@@ -91,17 +105,17 @@ main (int argc, char * argv[])
     }
 
     /* Make sure there is an input and output. */
-    if (!output)
-        output = stdout;
-    if (!input)
-        input = stdin;
+    if (!output_file)
+        output_file = stdout;
+    if (!input_file)
+        input_file = stdin;
 
     get_input_string ();
     hangulconv ();
 
     free (input_string);
-    fclose (output);
-    fclose (input);
+    fclose (output_file);
+    fclose (input_file);
     return 0;
 }
 
@@ -110,11 +124,12 @@ get_input_string() {
     int c, i = 0;
     unsigned int min_buffer_size = 128;
     unsigned int current_buffer_size = min_buffer_size;
+    char *utf8_input_string = NULL;
 
     input_string = xmalloc(min_buffer_size);
     memset (input_string, 0, min_buffer_size);
 
-    while ((c = fgetc(input)) != EOF) {
+    while ((c = fgetc(input_file)) != EOF) {
         input_string[i++] = (char)c;
         if (i == current_buffer_size) {
             current_buffer_size = current_buffer_size * STR_REALLOC_FACTOR;
@@ -123,7 +138,15 @@ get_input_string() {
     }
 
     input_string[i] = '\0';
-    input_string = xrealloc (input_string, i);
+    if (i < current_buffer_size)
+        input_string = xrealloc (input_string, i + 1);
+
+    if (strncmp (input_encoding, "UTF8", 4) != 0 &&
+        strncmp (input_encoding, "UTF-8", 5) != 0) {
+        utf8_input_string = encode (input_string, "UTF8", input_encoding);
+        free (input_string);
+        input_string = utf8_input_string;
+    }
 }
 
 void
@@ -131,13 +154,14 @@ hangulconv() {
     int initial_buffer = strlen (input_string) * 2;
     int needed_buffer = 0;
     char *output_string = xmalloc (initial_buffer);
+    char *encoded_output_string = NULL;
 
     int (*t13n_fn) (char*, size_t, char*, T13N_SYSTEM);
 
     if (hangulize_flag)
-        t13n_fn = hangulize_romaja;
+        t13n_fn = hangul_t13n_hangulize;
     else
-        t13n_fn = transliterate_hangul;
+        t13n_fn = hangul_t13n_transliterate;
 
     needed_buffer = t13n_fn (output_string, initial_buffer, input_string, t13n_system);
 
@@ -146,7 +170,17 @@ hangulconv() {
         t13n_fn (output_string, initial_buffer, input_string, t13n_system);
     }
 
-    fputs(output_string, output);
+    // Re-encode.
+    if (strncmp (output_encoding, "UTF8", 4) != 0 &&
+        strncmp (output_encoding, "UTF-8", 5) != 0) {
+        encoded_output_string = encode (output_string, output_encoding, "UTF8");
+        free (output_string);
+        output_string = encoded_output_string;
+    }
+
+    // Write output to output FILE. This is the end of our responsibility.
+    fputs (output_string, output_file);
+    free (output_string);
 }
 
 bool
@@ -218,7 +252,17 @@ Convert hangul to romaja characters or romaja to hangul.\n"), stdout);
   -o, --output=FILE                     print output to FILE\n\
 "), stdout);
         fputs (_("\
+      --output-encoding=ENCODING        character encoding of the output:\n\
+                                          e.g. UTF8, EUC-KR (as supported by\n\
+                                          iconv)\n\
+"), stdout);
+        fputs (_("\
   -i, --input=FILE                      get input from FILE\n\
+"), stdout);
+        fputs (_("\
+      --input-encoding=ENCODING         character encoding of the input:\n\
+                                          e.g. UTF8, EUC-KR (as supported by\n\
+                                          iconv)\n\
 "), stdout);
         fputs (_("\
   -v, --version                         print version information and quit\n\

@@ -39,6 +39,7 @@ AC_CHECK_HEADERS([stdbool.h])
 AC_CHECK_HEADERS([string.h])
 AC_CHECK_HEADERS([libintl.h])
 AC_CHECK_HEADERS([getopt.h])
+AC_CHECK_HEADERS([errno.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 

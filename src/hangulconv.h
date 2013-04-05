@@ -17,9 +17,10 @@
 #include <stdio.h>
 #include <getopt.h>
 #include <iconv.h>
-
-/* Local includes */
+#include <errno.h>
+#include "common.h"
 #include "libhangul-t13n.h"
+#include "encoding.h"
 
 #endif
 
