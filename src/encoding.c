@@ -30,8 +30,6 @@ encode (char *orig, char *to_code, char *from_code) {
 
     /* Handle failures. */
     if ((size_t)-1 == iconv_value) {
-        fputs (_("iconv failed\n"), stderr);
-
         switch (errno) {
         case EILSEQ:
             fputs (_("Invalid multibyte sequence.\n"), stderr);
