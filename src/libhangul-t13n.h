@@ -9,11 +9,11 @@
 #include <stdlib.h>
 
 typedef enum {
-  YALE,
-  REVISED_ROMANIZATION,
-  MCCUNE_REISCHAUER,
-  KONTSEVICH,
-  SKATS
+    YALE,
+    REVISED_ROMANIZATION,
+    MCCUNE_REISCHAUER,
+    KONTSEVICH,
+    SKATS
 } T13N_SYSTEM;
 
 /**

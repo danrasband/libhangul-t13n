@@ -1,4 +1,7 @@
 /**
+ * Copyright 2013 (C) Daniel Rasband
+ */
+/**
  * options:
  *   bool: Include reinforcement q (default - no)
  *   bool: Follow bilabial-u rule? (default -no) (setting to yes decreases chances of going back)

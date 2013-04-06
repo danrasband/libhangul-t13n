@@ -120,7 +120,8 @@ main (int argc, char * argv[])
 }
 
 void
-get_input_string() {
+get_input_string()
+{
     int c, i = 0;
     unsigned int min_buffer_size = 128;
     unsigned int current_buffer_size = min_buffer_size;
@@ -143,7 +144,7 @@ get_input_string() {
 
     // Encode the string if the input encoding isn't utf8.
     if (strncmp (input_encoding, "UTF8", 4) != 0 &&
-        strncmp (input_encoding, "UTF-8", 5) != 0) {
+            strncmp (input_encoding, "UTF-8", 5) != 0) {
         utf8_input_string = encode (input_string, "UTF8", input_encoding);
         free (input_string);
         input_string = utf8_input_string;
@@ -151,7 +152,8 @@ get_input_string() {
 }
 
 void
-hangulconv() {
+hangulconv()
+{
     int initial_buffer = strlen (input_string) * 2;
     int needed_buffer = 0;
     char *output_string = xmalloc (initial_buffer);
@@ -173,7 +175,7 @@ hangulconv() {
 
     // Re-encode the string if the output encoding isn't utf8.
     if (strncmp (output_encoding, "UTF8", 4) != 0 &&
-        strncmp (output_encoding, "UTF-8", 5) != 0) {
+            strncmp (output_encoding, "UTF-8", 5) != 0) {
         encoded_output_string = encode (output_string, output_encoding, "UTF8");
         free (output_string);
         output_string = encoded_output_string;

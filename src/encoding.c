@@ -7,7 +7,8 @@ iconv_t initialize_conv (const char *to_code, const char *from_code);
 void finalize_conv (iconv_t cd);
 
 char *
-encode (char *orig, char *to_code, char *from_code) {
+encode (char *orig, char *to_code, char *from_code)
+{
     size_t iconv_value;
     char *output = NULL;
     char *output_helper = NULL;
@@ -51,18 +52,19 @@ encode (char *orig, char *to_code, char *from_code) {
 }
 
 iconv_t
-initialize_conv(const char *to_code, const char *from_code) {
+initialize_conv(const char *to_code, const char *from_code)
+{
     iconv_t cd;
     cd = iconv_open (to_code, from_code);
     if ((iconv_t)-1 == cd) {
         /* Initialization failure. */
         if (errno == EINVAL) {
             fprintf (stderr,
-                 _("Conversion from '%s' to '%s' is not supported.\n"),
-                 from_code, to_code);
+                     _("Conversion from '%s' to '%s' is not supported.\n"),
+                     from_code, to_code);
         } else {
             fprintf (stderr, _("Encoding initialization failure: %s\n"),
-                 strerror (errno));
+                     strerror (errno));
         }
         exit (1);
     }
@@ -70,7 +72,8 @@ initialize_conv(const char *to_code, const char *from_code) {
 }
 
 void
-finalize_conv(iconv_t cd) {
+finalize_conv(iconv_t cd)
+{
     int v;
     v = iconv_close (cd);
     if (v != 0) {

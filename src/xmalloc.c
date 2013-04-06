@@ -3,7 +3,8 @@
 void xalloc_die(void);
 
 void *
-xmalloc (size_t n) {
+xmalloc (size_t n)
+{
     void *p = malloc (n);
     if (!p && n != 0)
         xalloc_die ();
@@ -13,16 +14,15 @@ xmalloc (size_t n) {
 void *
 xrealloc (void *p, size_t n)
 {
-  if (!n && p)
-    {
-      free (p);
-      return NULL;
+    if (!n && p) {
+        free (p);
+        return NULL;
     }
 
-  p = realloc (p, n);
-  if (!p && n)
-    xalloc_die ();
-  return p;
+    p = realloc (p, n);
+    if (!p && n)
+        xalloc_die ();
+    return p;
 }
 
 void
