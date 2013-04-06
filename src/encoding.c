@@ -1,8 +1,6 @@
 
 #include "encoding.h"
 
-#define UTF8 "UTF8"
-
 iconv_t initialize_conv (const char *to_code, const char *from_code);
 void finalize_conv (iconv_t cd);
 
