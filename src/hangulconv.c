@@ -141,6 +141,7 @@ get_input_string() {
     if (i < current_buffer_size)
         input_string = xrealloc (input_string, i + 1);
 
+    // Encode the string if the input encoding isn't utf8.
     if (strncmp (input_encoding, "UTF8", 4) != 0 &&
         strncmp (input_encoding, "UTF-8", 5) != 0) {
         utf8_input_string = encode (input_string, "UTF8", input_encoding);
@@ -156,7 +157,7 @@ hangulconv() {
     char *output_string = xmalloc (initial_buffer);
     char *encoded_output_string = NULL;
 
-    int (*t13n_fn) (char*, size_t, char*, T13N_SYSTEM);
+    int (*t13n_fn) (char*, size_t, const char*, T13N_SYSTEM);
 
     if (hangulize_flag)
         t13n_fn = hangul_t13n_hangulize;
@@ -170,7 +171,7 @@ hangulconv() {
         t13n_fn (output_string, initial_buffer, input_string, t13n_system);
     }
 
-    // Re-encode.
+    // Re-encode the string if the output encoding isn't utf8.
     if (strncmp (output_encoding, "UTF8", 4) != 0 &&
         strncmp (output_encoding, "UTF-8", 5) != 0) {
         encoded_output_string = encode (output_string, output_encoding, "UTF8");
