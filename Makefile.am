@@ -1,4 +1,4 @@
-SUBDIRS = src po
+SUBDIRS = src tests po
 ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST = config.rpath mkinstalldirs m4/Makefile.in

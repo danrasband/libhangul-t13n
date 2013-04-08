@@ -47,6 +47,7 @@ AC_CHECK_HEADERS([errno.h])
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
+tests/Makefile
 po/Makefile.in
 ])
 AC_OUTPUT

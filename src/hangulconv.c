@@ -74,20 +74,12 @@ main (int argc, char * argv[])
             break;
         case 'o':
             output_filename = optarg;
-            if (!(output_file = fopen(output_filename, "w"))) {
-                perror(output_filename);
-                exit(1);
-            }
             break;
         case 0xd4:
             output_encoding = optarg;
             break;
         case 'i':
             input_filename = optarg;
-            if (!(input_file = fopen(input_filename, "r"))) {
-                perror(input_filename);
-                exit(1);
-            }
             break;
         case 0xce:
             input_encoding = optarg;
@@ -105,10 +97,25 @@ main (int argc, char * argv[])
     }
 
     /* Make sure there is an input and output. */
-    if (!output_file)
+    if (output_filename) {
+        if (!(output_file = fopen(output_filename, "w"))) {
+            perror(output_filename);
+            exit(1);
+        }
+    }
+    else {
         output_file = stdout;
-    if (!input_file)
+    }
+
+    if (input_filename) {
+        if (!(input_file = fopen(input_filename, "r"))) {
+            perror(input_filename);
+            exit(1);
+        }
+    }
+    else {
         input_file = stdin;
+    }
 
     get_input_string ();
     hangulconv ();
