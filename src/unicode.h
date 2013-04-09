@@ -15,35 +15,21 @@
 typedef uint32_t ucschar;
 typedef uint8_t utf8char;
 
-/* UTF8 byte masks */
-#define UTF8_FOUR_BYTE_MASK     0xf0    // 11110xxx
-#define UTF8_THREE_BYTE_MASK    0xe0    // 1110xxxx
-#define UTF8_TWO_BYTE_MASK      0xc0    // 110xxxxx
-#define UTF8_ONE_BYTE_MAX       0x7f    // 01111111
-
-#define UTF8_IS_FOUR_BYTES(first_byte) ((first_byte & UTF8_FOUR_BYTE_MASK) == UTF8_FOUR_BYTE_MASK)
-#define UTF8_IS_THREE_BYTES(first_byte) ((first_byte & UTF8_THREE_BYTE_MASK) == UTF8_THREE_BYTE_MASK) \
-  && !UTF8_IS_FOUR_BYTES(first_byte)
-#define UTF8_IS_TWO_BYTES(first_byte) ((first_byte & UTF8_TWO_BYTE_MASK) == UTF8_TWO_BYTE_MASK) \
-  && !UTF8_IS_THREE_BYTES(first_byte)
-#define UTF8_IS_ONE_BYTE(first_byte) first_byte < UTF8_ONE_BYTE_MAX
-
-/* Struct to hold a utf8 character set */
-typedef struct {
-    uint8_t byte1;
-    uint8_t byte2;
-    uint8_t byte3;
-    uint8_t byte4;
-} utf8_char_bytes;
-
-/**
- * Convert utf8 character to unicode code point.
- */
-ucschar utf8_to_ucs(const utf8_char_bytes *bytes);
+typedef struct utf8_string_handler UTF8_STRING_HANDLER;
 
 /**
  * Convert first UTF-8 character to unicode code point.
  */
-int get_ucschar(const char *utf8_string, ucschar *dest);
+ucschar get_ucschar(UTF8_STRING_HANDLER *handler);
+
+/**
+ * Prepare a UTF8_STRING_HANDLER.
+ */
+UTF8_STRING_HANDLER *utf8_open(char *str);
+
+/**
+ * Close the UTF8_STRING_HANDLER, freeing memory, etc.
+ */
+void utf8_close(UTF8_STRING_HANDLER *handler);
 
 #endif

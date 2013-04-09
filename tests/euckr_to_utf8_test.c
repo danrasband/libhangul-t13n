@@ -2,7 +2,7 @@
  *
  */
 
-#include "../src/encoding.h"
+#include "encoding.h"
 #include <stdio.h>
 #include <string.h>
 

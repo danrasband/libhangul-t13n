@@ -6,6 +6,12 @@
 #include <string.h>
 #include <stdio.h>
 
+/* UTF8 byte masks */
+#define UTF8_FOUR_BYTE_MASK     0xf0    // 11110xxx
+#define UTF8_THREE_BYTE_MASK    0xe0    // 1110xxxx
+#define UTF8_TWO_BYTE_MASK      0xc0    // 110xxxxx
+#define UTF8_ONE_BYTE_MAX       0x7f    // 01111111
+
 /* UTF8 to Unicode conversion helpers. */
 #define UCS_FOUR_BYTE_START     0x10000
 #define UCS_THREE_BYTE_START    0x0800
@@ -27,19 +33,36 @@
 #define UTF8_SUB_BYTE_FACTOR    0x40    // 0x80 to 0xbf
 #define UTF8_SUB_BYTE_END       0xc0    // 0x80 to 0xbf (0xc0 become 0x80)
 
-int utf8_byte_length(uint8_t first_byte);
+// Macros for byte size
+#define UTF8_IS_FOUR_BYTES(first_byte) ((first_byte & UTF8_FOUR_BYTE_MASK) == UTF8_FOUR_BYTE_MASK)
+#define UTF8_IS_THREE_BYTES(first_byte) ((first_byte & UTF8_THREE_BYTE_MASK) == UTF8_THREE_BYTE_MASK) \
+    && !UTF8_IS_FOUR_BYTES(first_byte)
+#define UTF8_IS_TWO_BYTES(first_byte) ((first_byte & UTF8_TWO_BYTE_MASK) == UTF8_TWO_BYTE_MASK) \
+    && !UTF8_IS_THREE_BYTES(first_byte)
+#define UTF8_IS_ONE_BYTE(first_byte) first_byte < UTF8_ONE_BYTE_MAX
+
+/**
+ * Pointer to current position in UTF-8 string.
+ */
+struct utf8_string_handler {
+    utf8char *start;
+    utf8char *current;
+    utf8char *end;
+};
+
+int utf8_byte_length(utf8char first_byte);
 
 /**
  * Convert utf8 to unicode code points.
  */
 ucschar
-utf8_to_ucs(const utf8_char_bytes *bytes)
+utf8_to_ucs(b1, b2, b3, b4)
+    utf8char b1;
+    utf8char b2;
+    utf8char b3;
+    utf8char b4;
 {
     ucschar tmpchar;
-    utf8char b1 = bytes->byte1;
-    utf8char b2 = bytes->byte2;
-    utf8char b3 = bytes->byte3;
-    utf8char b4 = bytes->byte4;
 
     // 4-byte UTF8 char.
     if (UTF8_IS_FOUR_BYTES(b1)) {
@@ -80,34 +103,49 @@ utf8_to_ucs(const utf8_char_bytes *bytes)
     return tmpchar;
 }
 
-int
-get_ucschar(const char *utf8_str, ucschar *dest)
+UTF8_STRING_HANDLER *
+utf8_open(char *str)
 {
-    utf8_char_bytes bytes;
-    size_t len = strlen(utf8_str);
-    *dest = 0;
+    UTF8_STRING_HANDLER *handler = malloc(sizeof(UTF8_STRING_HANDLER));
+    handler->start = str;
+    handler->current = str;
+    handler->end = str + strlen(str);
+    return handler;
+}
 
-    if (len == '\0') {
-        return 0;
+void
+utf8_close(UTF8_STRING_HANDLER *handler)
+{
+    free(handler);
+}
+
+ucschar
+get_ucschar(UTF8_STRING_HANDLER *handler)
+{
+    int byte_length;
+    utf8char b1 = 0, b2 = 0, b3 = 0, b4 = 0;
+    if (handler == NULL || handler->current == handler->end)
+        return (ucschar)-1;
+
+    byte_length = utf8_byte_length(handler->current[0]);
+    switch (byte_length) {
+    case 4:
+        b4 = handler->current[3];
+    case 3:
+        b3 = handler->current[2];
+    case 2:
+        b2 = handler->current[1];
+    case 1:
+        b1 = handler->current[0];
     }
 
-    bytes.byte1 = utf8_str[0];
-    if (len > 1) {
-        bytes.byte2 = utf8_str[1];
-    }
-    if (len > 2) {
-        bytes.byte3 = utf8_str[2];
-    }
-    if (len > 3) {
-        bytes.byte4 = utf8_str[3];
-    }
+		handler->current += byte_length;
 
-    *dest = utf8_to_ucs(&bytes);
-
+    return utf8_to_ucs(b1, b2, b3, b4);
 }
 
 int
-utf8_byte_length(uint8_t first_byte)
+utf8_byte_length(utf8char first_byte)
 {
     if (UTF8_IS_FOUR_BYTES(first_byte))
         return 4;

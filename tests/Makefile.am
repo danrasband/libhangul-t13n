@@ -1,10 +1,8 @@
+AM_CFLAGS = -I$(top_builddir)/src
+
 TESTS = utf8_to_ucs_test
 check_PROGRAMS = utf8_to_ucs_test
 utf8_to_ucs_test_SOURCES = utf8_to_ucs_test.c $(top_builddir)/src/unicode.c
-
-TESTS += utf8_to_ucschar_test
-check_PROGRAMS += utf8_to_ucschar_test
-utf8_to_ucschar_test_SOURCES = utf8_to_ucs_test.c $(top_builddir)/src/unicode.c
 
 TESTS += euckr_to_utf8_test
 check_PROGRAMS += euckr_to_utf8_test
