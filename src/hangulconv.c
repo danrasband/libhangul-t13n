@@ -102,8 +102,7 @@ main (int argc, char * argv[])
             perror(output_filename);
             exit(1);
         }
-    }
-    else {
+    } else {
         output_file = stdout;
     }
 
@@ -112,8 +111,7 @@ main (int argc, char * argv[])
             perror(input_filename);
             exit(1);
         }
-    }
-    else {
+    } else {
         input_file = stdin;
     }
 

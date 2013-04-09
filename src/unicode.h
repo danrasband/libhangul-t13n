@@ -30,15 +30,20 @@ typedef uint8_t utf8char;
 
 /* Struct to hold a utf8 character set */
 typedef struct {
-  uint8_t byte1;
-  uint8_t byte2;
-  uint8_t byte3;
-  uint8_t byte4;
+    uint8_t byte1;
+    uint8_t byte2;
+    uint8_t byte3;
+    uint8_t byte4;
 } utf8_char_bytes;
 
 /**
  * Convert utf8 character to unicode code point.
  */
 ucschar utf8_to_ucs(const utf8_char_bytes *bytes);
+
+/**
+ * Convert first UTF-8 character to unicode code point.
+ */
+int get_ucschar(const char *utf8_string, ucschar *dest);
 
 #endif

@@ -27,6 +27,8 @@
 #define UTF8_SUB_BYTE_FACTOR    0x40    // 0x80 to 0xbf
 #define UTF8_SUB_BYTE_END       0xc0    // 0x80 to 0xbf (0xc0 become 0x80)
 
+int utf8_byte_length(uint8_t first_byte);
+
 /**
  * Convert utf8 to unicode code points.
  */
@@ -46,8 +48,7 @@ utf8_to_ucs(const utf8_char_bytes *bytes)
             tmpchar += (UTF8_SUB_BYTE_END - UTF8_4BYTE_BYTE2_START) * UTF8_SUB_BYTE_FACTOR * UTF8_SUB_BYTE_FACTOR;
             tmpchar += (b1 - UTF8_4BYTE_BYTE1_START - 1) * ((UTF8_SUB_BYTE_END - UTF8_SUB_BYTE_START) * UTF8_SUB_BYTE_FACTOR * UTF8_SUB_BYTE_FACTOR);
             tmpchar += (b2 - UTF8_SUB_BYTE_START) * UTF8_SUB_BYTE_FACTOR * UTF8_SUB_BYTE_FACTOR;
-        }
-        else {
+        } else {
             tmpchar += (b2 - UTF8_4BYTE_BYTE2_START) * UTF8_SUB_BYTE_FACTOR * UTF8_SUB_BYTE_FACTOR;
         }
         tmpchar += (b3 - UTF8_SUB_BYTE_START) * UTF8_SUB_BYTE_FACTOR;
@@ -60,8 +61,7 @@ utf8_to_ucs(const utf8_char_bytes *bytes)
             tmpchar += (UTF8_SUB_BYTE_END - UTF8_3BYTE_BYTE2_START) * UTF8_SUB_BYTE_FACTOR;
             tmpchar += (b1 - UTF8_3BYTE_BYTE1_START - 1) * ((UTF8_SUB_BYTE_END - UTF8_SUB_BYTE_START) * UTF8_SUB_BYTE_FACTOR);
             tmpchar += (b2 - UTF8_SUB_BYTE_START) * UTF8_SUB_BYTE_FACTOR;
-        }
-        else {
+        } else {
             tmpchar += (b2 - UTF8_3BYTE_BYTE2_START) * UTF8_SUB_BYTE_FACTOR;
         }
         tmpchar += b3 - UTF8_SUB_BYTE_START;
@@ -78,4 +78,42 @@ utf8_to_ucs(const utf8_char_bytes *bytes)
     }
 
     return tmpchar;
+}
+
+int
+get_ucschar(const char *utf8_str, ucschar *dest)
+{
+    utf8_char_bytes bytes;
+    size_t len = strlen(utf8_str);
+    *dest = 0;
+
+    if (len == '\0') {
+        return 0;
+    }
+
+    bytes.byte1 = utf8_str[0];
+    if (len > 1) {
+        bytes.byte2 = utf8_str[1];
+    }
+    if (len > 2) {
+        bytes.byte3 = utf8_str[2];
+    }
+    if (len > 3) {
+        bytes.byte4 = utf8_str[3];
+    }
+
+    *dest = utf8_to_ucs(&bytes);
+
+}
+
+int
+utf8_byte_length(uint8_t first_byte)
+{
+    if (UTF8_IS_FOUR_BYTES(first_byte))
+        return 4;
+    if (UTF8_IS_THREE_BYTES(first_byte))
+        return 3;
+    if (UTF8_IS_TWO_BYTES(first_byte))
+        return 2;
+    return 1;
 }
