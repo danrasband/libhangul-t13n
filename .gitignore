@@ -31,6 +31,8 @@ Makefile
 *.lo
 *.so
 hangulconv
+tests/utf8_to_ucs_test
+tests/euckr_to_utf8_test
 
 # Miscellaneous files
 /ABOUT-NLS
