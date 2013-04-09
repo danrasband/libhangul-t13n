@@ -41,8 +41,8 @@ static FILE *input_file;
 static FILE *output_file;
 
 // Encodings
-static char* input_encoding = "UTF8";
-static char* output_encoding = "UTF8";
+static char* input_encoding = "UTF-8";
+static char* output_encoding = "UTF-8";
 
 // Input string.
 static char *input_string = NULL;
