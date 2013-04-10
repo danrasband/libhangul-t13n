@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2013 Daniel Rasband.
+ */
 
 #ifndef __UNICODE_H__
 #define __UNICODE_H__
@@ -25,7 +28,7 @@ ucschar get_ucschar(UTF8_STRING_HANDLER *handler);
 /**
  * Prepare a UTF8_STRING_HANDLER.
  */
-UTF8_STRING_HANDLER *utf8_open(char *str);
+UTF8_STRING_HANDLER *utf8_open(const char *str);
 
 /**
  * Close the UTF8_STRING_HANDLER, freeing memory, etc.

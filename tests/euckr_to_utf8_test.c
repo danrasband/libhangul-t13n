@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2013 Daniel Rasband.
  */
 
 #include "encoding.h"

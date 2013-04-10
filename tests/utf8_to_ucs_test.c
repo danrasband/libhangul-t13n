@@ -1,5 +1,5 @@
 /**
- *
+ * Copyright (C) 2013 Daniel Rasband.
  */
 
 #include "unicode.h"
@@ -37,7 +37,7 @@ main()
             exit_status = 1;
             break;
         }
-				i++;
+        i++;
     }
 
     utf8_close(str_handler);

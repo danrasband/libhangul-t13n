@@ -56,11 +56,7 @@ int utf8_byte_length(utf8char first_byte);
  * Convert utf8 to unicode code points.
  */
 ucschar
-utf8_to_ucs(b1, b2, b3, b4)
-    utf8char b1;
-    utf8char b2;
-    utf8char b3;
-    utf8char b4;
+utf8_to_ucs(utf8char b1, utf8char b2, utf8char b3, utf8char b4)
 {
     ucschar tmpchar;
 
@@ -104,12 +100,12 @@ utf8_to_ucs(b1, b2, b3, b4)
 }
 
 UTF8_STRING_HANDLER *
-utf8_open(char *str)
+utf8_open(const char *str)
 {
     UTF8_STRING_HANDLER *handler = malloc(sizeof(UTF8_STRING_HANDLER));
-    handler->start = str;
-    handler->current = str;
-    handler->end = str + strlen(str);
+    handler->start = (utf8char *)str;
+    handler->current = (utf8char *)str;
+    handler->end = (utf8char *)(str + strlen(str));
     return handler;
 }
 
@@ -139,7 +135,7 @@ get_ucschar(UTF8_STRING_HANDLER *handler)
         b1 = handler->current[0];
     }
 
-		handler->current += byte_length;
+    handler->current += byte_length;
 
     return utf8_to_ucs(b1, b2, b3, b4);
 }

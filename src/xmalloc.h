@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2013 Daniel Rasband.
+ */
 
 #ifndef __XMALLOC_H__
 #define __XMALLOC_H__

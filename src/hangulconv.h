@@ -1,4 +1,6 @@
 /**
+ * Copyright (C) 2013 Daniel Rasband.
+ *
  * Header file for hangulconv.c.
  */
 

@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2013 Daniel Rasband.
+ */
 
 #ifndef __COMMON_H__
 #define __COMMON_H__

@@ -1,4 +1,6 @@
 /**
+ * Copyright (C) 2013 Daniel Rasband.
+ *
  * File: hangulconv.c
  * Author: Daniel Rasband <danrasband@gmail.com>
  * Description: This is the command-line tool part of the libhtr

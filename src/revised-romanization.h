@@ -1,4 +1,6 @@
 /**
+ * Copyright (C) 2013 Daniel Rasband.
+ *
  * Options:
  *   bool: ambiguity separation (art. 2), (default - yes)
  *   bool: include geographic indicator (art. 5 aux.), (default - yes)

@@ -1,3 +1,10 @@
+/**
+ * Copyright (C) 2013 Daniel Rasband.
+ *
+ * This code has mostly been copied from the coreutils package:
+ * Copyright (C) 1990-2000, 2002-2006, 2008-2011 Free Software Foundation, Inc.
+ */
+
 #include "xmalloc.h"
 
 void xalloc_die(void);

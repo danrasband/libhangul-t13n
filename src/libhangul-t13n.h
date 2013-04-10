@@ -1,7 +1,6 @@
 /**
- * Copyright 2013 Daniel Rasband <danrasband@gmail.com>
+ * Copyright (C) 2013 Daniel Rasband.
  */
-
 
 #ifndef __LIBHANGUL_T13N_H__
 #define __LIBHANGUL_T13N_H__
