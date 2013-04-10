@@ -2,13 +2,14 @@
  * Copyright (C) 2013 Daniel Rasband.
  */
 
-#include "unicode.h"
 #include <stdio.h>
+#include "tests.h"
+#include "unicode.h"
 
 int
 main()
 {
-    int exit_status = 0, i = 0;
+    int exit_status = PASS, i = 0;
     ucschar ucs_c;
     UTF8_STRING_HANDLER *str_handler;
 
@@ -34,7 +35,7 @@ main()
 
     while ((ucs_c = get_ucschar(str_handler)) != (ucschar)EOF) {
         if (ucs_c != ucs_str[i]) {
-            exit_status = 1;
+            exit_status = FAIL;
             break;
         }
         i++;
