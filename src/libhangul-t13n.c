@@ -5,7 +5,6 @@
 #include "common.h"
 #include "libhangul-t13n.h"
 #include "unicode.h"
-#include "romaja.h"
 #include "hangul.h"
 #include "yale.h"
 #include "mccune-reischauer.h"
@@ -16,14 +15,22 @@
 int
 hangul_t13n_transliterate(char* dest, size_t buffer_size, const char* orig, T13N_SYSTEM system)
 {
+    ucschar c;
     int buffer_needed = 0;
+    UTF8_STRING_HANDLER *handler = utf8_open(orig);
 
+    /* START TESTING */
     buffer_needed = strlen(orig);
-
     strncpy(dest, orig, buffer_size);
-
     if (buffer_size > 0)
         dest[buffer_size - 1] = '\0';
+    /* END TESTING */
+
+    while ((c = get_ucschar(handler)) != (ucschar)EOF) {
+
+    }
+
+    utf8_close(handler);
 
     return buffer_needed;
 }

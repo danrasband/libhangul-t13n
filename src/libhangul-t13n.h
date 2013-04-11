@@ -7,6 +7,9 @@
 
 #include <stdlib.h>
 
+/**
+ * The different types of transliteration systems available.
+ */
 typedef enum {
     YALE,
     REVISED_ROMANIZATION,
