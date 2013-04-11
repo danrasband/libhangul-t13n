@@ -26,6 +26,11 @@ typedef struct utf8_string_handler UTF8_STRING_HANDLER;
 ucschar get_ucschar(UTF8_STRING_HANDLER *handler);
 
 /**
+ * Convert a unicode code point to a UTF8 character (a string of 1 to 4 bytes).
+ */
+utf8char *ucschar_to_utf8char_str(ucschar c);
+
+/**
  * Prepare a UTF8_STRING_HANDLER.
  */
 UTF8_STRING_HANDLER *utf8_open(const char *str);

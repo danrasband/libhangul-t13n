@@ -2,9 +2,10 @@
  * Copyright (C) 2013 Daniel Rasband
  */
 
-#include "unicode.h"
 #include <string.h>
 #include <stdio.h>
+#include "unicode.h"
+#include "xmalloc.h"
 
 /* UTF8 byte masks */
 #define UTF8_FOUR_BYTE_MASK     0xf0    // 11110xxx
@@ -51,6 +52,7 @@ struct utf8_string_handler {
 };
 
 int utf8_byte_length(utf8char first_byte);
+int utf8_byte_length_from_ucschar(ucschar c);
 
 /**
  * Convert utf8 to unicode code points.
@@ -102,7 +104,7 @@ utf8_to_ucs(utf8char b1, utf8char b2, utf8char b3, utf8char b4)
 UTF8_STRING_HANDLER *
 utf8_open(const char *str)
 {
-    UTF8_STRING_HANDLER *handler = malloc(sizeof(UTF8_STRING_HANDLER));
+    UTF8_STRING_HANDLER *handler = xmalloc(sizeof(UTF8_STRING_HANDLER));
     handler->start = (utf8char *)str;
     handler->current = (utf8char *)str;
     handler->end = (utf8char *)(str + strlen(str));
@@ -140,6 +142,55 @@ get_ucschar(UTF8_STRING_HANDLER *handler)
     return utf8_to_ucs(b1, b2, b3, b4);
 }
 
+utf8char *
+ucschar_to_utf8char_str(ucschar c)
+{
+    utf8char *character_str;
+    int utf8_byte_len = utf8_byte_length_from_ucschar(c);
+    int tmp_int;
+    character_str = xmalloc(utf8_byte_len + 1);
+    memset(character_str, '\0', utf8_byte_len + 1);
+
+    switch (utf8_byte_len) {
+    case 4:
+        character_str[0] = UTF8_4BYTE_BYTE1_START;
+        if (c >= (UCS_FOUR_BYTE_START + 48 * 64)) {
+            tmp_int = c - UCS_FOUR_BYTE_START - (48 * 64 * 64);
+            character_str[0] += 1 + tmp_int / (64 * 64 * 64);
+            character_str[1] = 0x80 + (tmp_int / (64 * 64)) % 64;
+            character_str[2] = 0x80 + (tmp_int / 64) % 64;
+            character_str[3] = 0x80 + (tmp_int % 64);
+        } else {
+            character_str[1] = UTF8_4BYTE_BYTE2_START + ((c - UCS_FOUR_BYTE_START) / (64 * 64));
+            character_str[2] = UTF8_SUB_BYTE_START + ((c - UCS_FOUR_BYTE_START) % (64 * 64));
+            character_str[3] = UTF8_SUB_BYTE_START + ((c - UCS_FOUR_BYTE_START) % 64);
+        }
+        break;
+    case 3:
+        character_str[0] = UTF8_3BYTE_BYTE1_START;
+        if (c >= (UCS_THREE_BYTE_START + 32 * 64)) {
+            tmp_int = c - UCS_THREE_BYTE_START - (32 * 64);
+            character_str[0] += 1 + tmp_int / (64*64);
+            character_str[1] = 0x80 + (tmp_int % (64*64)) / 64;
+            character_str[2] = 0x80 + (tmp_int % 64);
+        } else {
+            character_str[1] = UTF8_3BYTE_BYTE2_START + ((c - UCS_THREE_BYTE_START) / 64);
+            character_str[2] = UTF8_SUB_BYTE_START + ((c - UCS_THREE_BYTE_START) % 64);
+        }
+        break;
+    case 2:
+        character_str[0] = UTF8_2BYTE_BYTE1_START;
+        character_str[0] += (c - UCS_TWO_BYTE_START) / 64;
+        character_str[1] = UTF8_SUB_BYTE_START + ((c - UCS_TWO_BYTE_START) % 64);
+        break;
+    case 1:
+        character_str[0] = (utf8char)c;
+        break;
+    }
+
+    return character_str;
+}
+
 int
 utf8_byte_length(utf8char first_byte)
 {
@@ -148,6 +199,18 @@ utf8_byte_length(utf8char first_byte)
     if (UTF8_IS_THREE_BYTES(first_byte))
         return 3;
     if (UTF8_IS_TWO_BYTES(first_byte))
+        return 2;
+    return 1;
+}
+
+int
+utf8_byte_length_from_ucschar(ucschar c)
+{
+    if (c >= UCS_FOUR_BYTE_START)
+        return 4;
+    if (c >= UCS_THREE_BYTE_START)
+        return 3;
+    if (c >= UCS_TWO_BYTE_START)
         return 2;
     return 1;
 }

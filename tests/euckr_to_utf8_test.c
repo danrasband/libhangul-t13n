@@ -19,7 +19,7 @@ main()
 
     encoded = encode(orig, to_encoding, from_encoding);
 
-    ASSERT(0 == strncmp("안녕\n", encoded, strlen("안녕\n")))
+    ASSERT((0 == strncmp("안녕\n", encoded, strlen("안녕\n"))));
 
     free(encoded);
     return PASS;

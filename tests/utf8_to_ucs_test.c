@@ -35,7 +35,7 @@ main()
     str_handler = utf8_open(utf8_str);
 
     while ((ucs_c = get_ucschar(str_handler)) != (ucschar)EOF) {
-        ASSERT(ucs_c == ucs_str[i]);
+        ASSERT((ucs_c == ucs_str[i]));
         i++;
     }
 
