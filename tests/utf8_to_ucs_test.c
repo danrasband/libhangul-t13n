@@ -3,7 +3,7 @@
  */
 
 #include <stdio.h>
-#include "tests.h"
+#include "macros.h"
 #include "unicode.h"
 
 int
