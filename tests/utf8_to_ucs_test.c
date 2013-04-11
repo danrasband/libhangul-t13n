@@ -2,6 +2,7 @@
  * Copyright (C) 2013 Daniel Rasband.
  */
 
+#include <config.h>
 #include <stdio.h>
 #include "macros.h"
 #include "unicode.h"
@@ -9,7 +10,7 @@
 int
 main()
 {
-    int exit_status = PASS, i = 0;
+    int i = 0;
     ucschar ucs_c;
     UTF8_STRING_HANDLER *str_handler;
 
@@ -34,13 +35,10 @@ main()
     str_handler = utf8_open(utf8_str);
 
     while ((ucs_c = get_ucschar(str_handler)) != (ucschar)EOF) {
-        if (ucs_c != ucs_str[i]) {
-            exit_status = FAIL;
-            break;
-        }
+        ASSERT(ucs_c == ucs_str[i]);
         i++;
     }
 
     utf8_close(str_handler);
-    return exit_status;
+    return PASS;
 }
