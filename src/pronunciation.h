@@ -1,0 +1,60 @@
+/**
+ * Copyright 2013 (C) Daniel Rasband
+ */
+
+// Pronunciation Rules
+typedef enum {
+  // Well-known brands
+  T13N_PRONUNCIATION_COMPANY_NAMES = 1,
+
+  // Famous people
+  T13N_PRONUNCIATION_PEOPLE_NAMES = 2,
+
+  // Mountains, rivers, etc.
+  T13N_PRONUNCIATION_GEOGRAPHICAL_LANDMARKS = 4,
+
+  // Cities, states, provinces, etc.
+  T13N_PRONUNCIATION_GEOGRAPHICAL_LOCATIONS = 8
+
+} T13N_PROPER_NOUN_RULES;
+
+typedef enum {
+  // Final consonant cluster simplification
+  T13N_PRONUNCIATION_PACHIM_SIMPLIFICATION = 1,
+
+  // k,t,p -> g,d,b and l -> r before vowels
+  T13N_PRONUNCIATION_VOICING = 2,
+
+  // Consonant assimilation (k -> ng, l -> n, n -> l, t -> n)
+  T13N_PRONUNCIATION_ASSIMILATION = 4,
+
+  // ㄴ,ㄹ epenthesis before 이, 여, 유, etc.
+  T13N_PRONUNCIATION_PREGLIDE_EPENTHESIS = 8,
+
+  // Palatalization of alveolars ㄷ -> ㅈ, ㅌ->ㅊ, ㅈㅎ->ㅊ, etc.
+  T13N_PRONUNCIATION_PALATALIZATION = 16,
+
+  // Aspiration of obstruents
+  T13N_PRONUNCIATION_ASPIRATION = 32,
+
+  // Fortisization of obstruents
+  T13N_PRONUNCIATION_FORTISIZATION = 64
+
+} T13N_PRONUNCIATION_RULES;
+
+typedef enum {
+  T13N_PROPER_NOUN_MASK_ALL = (T13N_PRONUNCIATION_COMPANY_NAMES |
+    T13N_PRONUNCIATION_PEOPLE_NAMES |
+    T13N_PRONUNCIATION_GEOGRAPHICAL_LANDMARKS |
+    T13N_PRONUNCIATION_GEOGRAPHICAL_LOCATIONS)
+} T13N_PROPER_NOUN_MASKS;
+
+typedef enum {
+  T13N_PRONUNCIATION_MASK_ALL = (T13N_PRONUNCIATION_PACHIM_SIMPLIFICATION |
+    T13N_PRONUNCIATION_VOICING |
+    T13N_PRONUNCIATION_ASSIMILATION |
+    T13N_PRONUNCIATION_PREGLIDE_EPENTHESIS |
+    T13N_PRONUNCIATION_PALATALIZATION |
+    T13N_PRONUNCIATION_ASPIRATION |
+    T13N_PRONUNCIATION_FORTISIZATION)
+} T13N_PRONUNCIATION_RULE_MASKS;

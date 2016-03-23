@@ -1,0 +1,13 @@
+# Countries
+# Provinces
+# Cities
+# Dong
+# Gun
+# Myeon
+# Gu
+# Ga
+# Eup
+# Mountains
+# Cultural Entities
+# Architecture
+# Companies

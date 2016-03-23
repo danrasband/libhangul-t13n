@@ -1,0 +1,80 @@
+# Hangul Transliteration Library.
+# Copyright (C) 2013.
+# This file is distributed under the same license as the libhangul-t13n package.
+# Daniel Rasband <danrasband@gmail.com>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libhangul-t13n 0.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-04-03 07:46-0600\n"
+"PO-Revision-Date: 2013-04-03 07:48-0600\n"
+"Last-Translator: Dan Rasband <danrasband@gmail.com>\n"
+"Language-Team: English\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../src/hangulconv.c:82
+#, c-format
+msgid "Try `%s --help`' for more information.\n"
+msgstr "Try `%s --help`' for more information.\n"
+
+#: ../src/hangulconv.c:85
+#, c-format
+msgid "Usage: %s [OPTION]... [INPUT]...\n"
+msgstr "Usage: %s [OPTION]... [INPUT]...\n"
+
+#: ../src/hangulconv.c:86
+msgid ""
+"Transliterate Hangul text.\n"
+"\n"
+msgstr ""
+"Transliterate Hangul text.\n"
+"\n"
+
+#: ../src/hangulconv.c:87
+msgid ""
+"Mandatory arguments to long options are mandatory for short options, too.\n"
+msgstr ""
+"Mandatory arguments to long options are mandatory for short options, too.\n"
+
+#: ../src/hangulconv.c:88
+msgid "Convert hangul to romaja characters or romaja to hangul.\n"
+msgstr "Convert hangul to romaja characters or romaja to hangul.\n"
+
+#: ../src/hangulconv.c:90
+msgid ""
+"  -t, --transliteration-system=SYSTEM   use transliteration system SYSTEM:\n"
+"                                          yale (y), revised-romanization "
+"(r),\n"
+"                                          mccune-reischauer (m), kontsevich\n"
+"                                          (k), skats (s)\n"
+msgstr ""
+"  -t, --transliteration-system=SYSTEM   use transliteration system SYSTEM:\n"
+"                                          yale (y), revised-romanization "
+"(r),\n"
+"                                          mccune-reischauer (m), kontsevich\n"
+"                                          (k), skats (s)\n"
+
+#: ../src/hangulconv.c:96
+msgid "  -o, --output=FILE                     print output to FILE\n"
+msgstr "  -o, --output=FILE                     print output to FILE\n"
+
+#: ../src/hangulconv.c:99
+msgid "  -i, --input=FILE                      get input from FILE\n"
+msgstr "  -i, --input=FILE                      get input from FILE\n"
+
+#: ../src/hangulconv.c:102
+msgid ""
+"  -v, --version                         print version information and quit\n"
+msgstr ""
+"  -v, --version                         print version information and quit\n"
+
+#: ../src/hangulconv.c:105
+msgid ""
+"  -h, --help                            print this help message and quit\n"
+msgstr ""
+"  -h, --help                            print this help message and quit\n"
